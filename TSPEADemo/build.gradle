@@ -16,6 +16,14 @@ dependencies {
 	compile "com.seaglasslookandfeel:seaglasslookandfeel:0.2"
 }
 
+sourceSets { 
+	main { 
+		resources { 
+			srcDir ‘src/main/resources’	
+		} 
+	}	
+}
+
 jar {
 	baseName = 'TSPEADemo'
 	version = '0.0.1'

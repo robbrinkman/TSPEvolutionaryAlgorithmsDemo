@@ -19,11 +19,13 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -145,7 +147,6 @@ public final class TSPEADemo {
 		this.currentGeneration = generation;
 	}
 
-
 	public void enableStartButton(boolean b) {
 		algorithmUI.enableStartButton(b);
 	}
@@ -169,31 +170,42 @@ public final class TSPEADemo {
 	public void done() {
 		enableStartButton(true);
 		enableStopButton(false);
+		ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource(
+				"images/done.png"));
+
+		// resize image in icon
+		Image img = icon.getImage();
+		Image newimg = img.getScaledInstance(150, 150,
+				java.awt.Image.SCALE_SMOOTH);
+		icon = new ImageIcon(newimg);
 
 		JOptionPane
 				.showMessageDialog(
 						frame,
-						"<html><span style='font-size:1.5em'>The Evolutionary Algorithm has finished.<br /><br />"
+						"<html>"
+								+ "<p style='margin:20px; margin-left:0px; margin-right:40px;'>"
+								+ "<span style='font-size:1.5em'>The Evolutionary Algorithm has finished.<br /><br />"
 								+ "Best Candidate Solution Found: "
-								+ currentBestCandidateSolutionFound
-								+ ".<br />"
+								+ currentBestCandidateSolutionFound + "<br />"
 								+ "In number of generations: "
 								+ currentGeneration
-								+ "<br /><br /></span></html>", "Done!",
-						JOptionPane.PLAIN_MESSAGE);
+								+ "<br /><br /></span></p></html>", "Done!",
+						JOptionPane.OK_OPTION, icon);
 
 	}
-	
+
 	public static void main(String[] args) {
-		
+
 		/* Set the look and feel before we start anything */
 		try {
-            UIManager.installLookAndFeel("SeaGlass", "com.seaglasslookandfeel.SeaGlassLookAndFeel");
-            UIManager.setLookAndFeel("com.seaglasslookandfeel.SeaGlassLookAndFeel");
-        } catch (Exception e) {
-	        e.printStackTrace();
-	    }
-		
+			UIManager.installLookAndFeel("SeaGlass",
+					"com.seaglasslookandfeel.SeaGlassLookAndFeel");
+			UIManager
+					.setLookAndFeel("com.seaglasslookandfeel.SeaGlassLookAndFeel");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 		new TSPEADemo();
 	}
 }

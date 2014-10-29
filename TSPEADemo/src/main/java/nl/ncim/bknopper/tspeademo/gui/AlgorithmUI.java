@@ -146,22 +146,26 @@ public class AlgorithmUI extends JPanel implements ActionListener {
 		JPanel algorithmPaddingPanel = new JPanel();
 		algorithmPaddingPanel.setBorder(new EmptyBorder(10, 10, 50, 10));
 		algorithmInfoPanel = new JPanel();
-		algorithmInfoPanel.setPreferredSize(new Dimension(290, 100));
+		algorithmInfoPanel.setPreferredSize(new Dimension(290, 200));
 
-		algorithmInfoPanel.setBorder(BorderFactory
-				.createTitledBorder("Evolutionary Algorithm Runtime Info"));
+		Font biggerFont = algorithmInfoPanel.getFont().deriveFont(13f);
+		
+		algorithmInfoPanel.setLayout(new GridLayout(4, 1, 2, 2));
 
-		algorithmInfoPanel.setLayout(new GridLayout(2, 1));
-
-		currentGenerationLabel = new JLabel(
-				TSPEADemoText.LABEL_CURRENT_GENERATION + ": " + 0);
-		Font biggerFont = currentGenerationLabel.getFont().deriveFont(13f);
+		JLabel generationInfoLabel = new JLabel(TSPEADemoText.LABEL_CURRENT_GENERATION);
+		generationInfoLabel.setHorizontalAlignment(JLabel.CENTER);
+		algorithmInfoPanel.add(generationInfoLabel);
+		currentGenerationLabel = new JLabel("" + 0);
 		currentGenerationLabel.setFont(biggerFont);
+		currentGenerationLabel.setHorizontalAlignment(JLabel.CENTER);
 		algorithmInfoPanel.add(currentGenerationLabel);
 
-		currentFitnessLabel = new JLabel(TSPEADemoText.LABEL_CURRENT_FITNESS
-				+ ": ");
+		JLabel fitnessInfoLabel = new JLabel(TSPEADemoText.LABEL_CURRENT_FITNESS);
+		fitnessInfoLabel.setHorizontalAlignment(JLabel.CENTER);
+		algorithmInfoPanel.add(fitnessInfoLabel);
+		currentFitnessLabel = new JLabel();
 		currentFitnessLabel.setFont(biggerFont);
+		currentFitnessLabel.setHorizontalAlignment(JLabel.CENTER);
 		algorithmInfoPanel.add(currentFitnessLabel);
 
 		algorithmPaddingPanel.add(algorithmInfoPanel);
@@ -513,12 +517,10 @@ public class AlgorithmUI extends JPanel implements ActionListener {
 	}
 
 	public void showAlgorithmInfo(double fitness, int generation) {
-		currentGenerationLabel.setText(TSPEADemoText.LABEL_CURRENT_GENERATION
-				+ ": " + generation);
+		currentGenerationLabel.setText("" + generation);
 
 		String fitnessString = (Double.isNaN(fitness)) ? "" : String
 				.valueOf(fitness);
-		currentFitnessLabel.setText(TSPEADemoText.LABEL_CURRENT_FITNESS + ": "
-				+ fitnessString);
+		currentFitnessLabel.setText(fitnessString);
 	}
 }
