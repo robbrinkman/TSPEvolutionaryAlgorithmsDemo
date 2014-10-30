@@ -17,9 +17,9 @@ dependencies {
 }
 
 sourceSets { 
-	main { 
-		resources { 
-			srcDir ‘src/main/resources’	
+        main { 
+	        resources { 
+                    srcDir "src/main/resources"	
 		} 
 	}	
 }
