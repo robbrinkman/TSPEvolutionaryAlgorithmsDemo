@@ -93,7 +93,7 @@ public class AlgorithmUI extends JPanel implements ActionListener {
 	private JPanel algorithmInfoPanel;
 	private JLabel currentGenerationLabel;
 	private JLabel currentFitnessLabel;
-	private JComboBox predefinedSetsComboBox;
+	private JComboBox<PredefinedSet> predefinedSetsComboBox;
 	private JLabel parentPoolSize;
 	private JSlider parentPoolSizeSlide;
 
@@ -110,7 +110,6 @@ public class AlgorithmUI extends JPanel implements ActionListener {
 		Dimension dimension = new Dimension(DEFAULT_LAUNCHER_WIDTH,
 				DEFAULT_LAUNCHER_HEIGHT);
 		this.setSize(dimension);
-		this.setBackground(Color.WHITE);
 		this.setLayout(new BorderLayout());
 
 		// Add the main panel

@@ -61,7 +61,6 @@ public final class TSPEADemo {
 
 		public AppFrame() {
 			initializeWWD();
-			initializeMenu();
 		}
 
 		private void initializeWWD() {
@@ -71,22 +70,6 @@ public final class TSPEADemo {
 					Position.fromDegrees(52.18958, 5.29524, 6e6));
 			layer = TSPUtils.createCitiesLayer("Cities");
 			wwd.getModel().getLayers().add(layer);
-		}
-
-		private void initializeMenu() {
-			JMenuBar menuBar = new JMenuBar();
-			JMenu menu = new JMenu(TSPEADemoText.MENU_APPLICATION);
-			menuBar.add(menu);
-
-			JMenuItem quitMenuItem = new JMenuItem(TSPEADemoText.MENU_ITEM_QUIT);
-			quitMenuItem.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent ae) {
-					System.exit(0);
-				}
-			});
-			menu.add(quitMenuItem);
-
-			this.setJMenuBar(menuBar);
 		}
 
 		public void showRoute(List<City> route, double fitness) {
@@ -112,7 +95,6 @@ public final class TSPEADemo {
 			EventQueue.invokeAndWait(new Runnable() {
 				public void run() {
 					frame.setTitle("JavaOne TSP Demo");
-					frame.setBackground(Color.WHITE);
 					frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 					frame.setVisible(true);
 
@@ -195,17 +177,6 @@ public final class TSPEADemo {
 	}
 
 	public static void main(String[] args) {
-
-		/* Set the look and feel before we start anything */
-		try {
-			UIManager.installLookAndFeel("SeaGlass",
-					"com.seaglasslookandfeel.SeaGlassLookAndFeel");
-			UIManager
-					.setLookAndFeel("com.seaglasslookandfeel.SeaGlassLookAndFeel");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
 		new TSPEADemo();
 	}
 }
