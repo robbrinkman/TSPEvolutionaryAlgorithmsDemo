@@ -6,6 +6,10 @@ mainClassName = 'nl.ncim.bknopper.tspeademo.gui.TSPEADemo'
 repositories {
 	mavenLocal()
 	mavenCentral()
+	
+	maven {
+        url "http://mvn.erichseifert.de/maven2"
+    }
 }
 
 dependencies {
@@ -14,6 +18,7 @@ dependencies {
 	compile "org.jogamp.gluegen:gluegen-rt-main:2.2.1"
 	compile "org.jogamp.jogl:jogl-all-main:2.2.1"
 	compile "com.seaglasslookandfeel:seaglasslookandfeel:0.2"
+	compile "com.xeiam.xchart:xchart:2.4.2"
 }
 
 sourceSets { 
