@@ -20,4 +20,4 @@ This should start resolving all the dependency and start the demo for you.
 
 Have fun!
 
-For the talk I did on J-Fall where this demo is used, see: [Evolutionairy Algorithms J-Fall talk](www.youtube.com/watch?v=5LUqjnwbp5c)
+For the talk I did on J-Fall where this demo is used, see: [Evolutionairy Algorithms J-Fall talk](http://www.youtube.com/watch?v=5LUqjnwbp5c)
