@@ -112,7 +112,9 @@ public class Algorithm {
                 int generations = 0;
 
 		        /* show the current best candidate solution on the demo screen */
-                view.showLastGeneration(bestCandidateSolution, generations);
+                if(view != null) {
+                    view.showLastGeneration(bestCandidateSolution, generations);
+                }
 
 		        /* start the iterative part of the algorithm */
                 while (generations != nrOfGenerations
@@ -164,7 +166,9 @@ public class Algorithm {
                     Collections.sort(population);
 
                     generations++;
-                    view.showLastGeneration(population.get(0), generations);
+                    if(view != null) {
+                        view.showLastGeneration(population.get(0), generations);
+                    }
 
                     /*
                      * Sleep, so the Thread can be interrupted if needed and to
@@ -174,14 +178,18 @@ public class Algorithm {
                     try {
                         Thread.sleep(1);
                     } catch (InterruptedException e) {
-                        view.reset();
-                        view.done();
+                        if(view != null) {
+                            view.reset();
+                            view.done();
+                        }
                         return;
                     }
                 }
 
                 /* we're done here */
-                view.done();
+                if(view != null) {
+                    view.done();
+                }
             }
         });
 

@@ -33,6 +33,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import nl.ncim.bknopper.tspeademo.ea.Algorithm;
+import nl.ncim.bknopper.tspeademo.ea.AlgorithmRunner;
 
 public class AlgorithmUI extends JPanel implements ActionListener {
 
@@ -71,8 +72,6 @@ public class AlgorithmUI extends JPanel implements ActionListener {
 	protected JButton stopButton;
 
 	private TSPEADemo demo;
-
-	private Algorithm algorithm;
 
 	private JLabel mutationProbLabel;
 	private JSlider mutationProbability;
@@ -439,15 +438,14 @@ public class AlgorithmUI extends JPanel implements ActionListener {
 			startButton.setEnabled(false);
 			stopButton.setEnabled(true);
 
-			algorithm = new Algorithm(demo, mutationProbability.getValue(),
+			AlgorithmRunner.startAlgorithm(demo, mutationProbability.getValue(),
 					populationSizeSlide.getValue(),
 					nrOfGenerationsSlide.getValue(),
 					fitnessThresholdsSlide.getValue(),
 					parentSelectionSizeSlide.getValue(),
 					parentPoolSizeSlide.getValue());
-			algorithm.startAlgorithm();
 		} else if (eventSource.equals(stopButton)) {
-			algorithm.stopAlgorithm();
+			AlgorithmRunner.stopAlgorithm();
 			demo.reset();
 		} else if (eventSource.equals(predefinedSetsComboBox)) {
 			setPredefinedSet((PredefinedSet) predefinedSetsComboBox
