@@ -9,6 +9,10 @@ To get it, just clone this repository by using your favorite git gui or by execu
 git clone https://github.com/bknopper/TSPEvolutionaryAlgorithmsDemo.git
 ```
 
+### DISCLAIMER
+This is a demo, and as such, I've used the prototyping approach. The domain part of the backend has been constructed with thought...all else was built to work. As fast as possible.
+
+
 ### Running the Demo - Backend
 Because this demo uses [Gradle](https://gradle.org/) as package manager / build automation system and has the Gradle wrapper incorporated you can run the backend of this demo by simply executing the gradle wrapper.
 
