@@ -4,31 +4,34 @@ apply plugin: 'application'
 mainClassName = 'nl.bknopper.tspeademo.backend.WebApp'
 
 repositories {
-	mavenLocal()
-	mavenCentral()
+    mavenLocal()
+    mavenCentral()
 }
 
 dependencies {
-	compile "junit:junit:4.11"
-	compile "gov.nasa:worldwind:2.0.0-986"
-	compile "org.jogamp.gluegen:gluegen-rt-main:2.2.1"
-	compile "org.jogamp.jogl:jogl-all-main:2.2.1"
-	compile "org.springframework.boot:spring-boot-starter-web:1.2.5.RELEASE"
+    compile "junit:junit:4.11"
+    compile "gov.nasa:worldwind:2.0.0-986"
+    compile "org.jogamp.gluegen:gluegen-rt-main:2.2.1"
+    compile "org.jogamp.jogl:jogl-all-main:2.2.1"
+    compile "org.springframework.boot:spring-boot-starter-web:1.2.5.RELEASE"
 }
 
 sourceSets { 
-        main {
-	        resources { 
-                    srcDir "src/main/resources"	
-		} 
-	}	
+    main {
+        java {
+            srcDir 'backend/src'
+        }
+        resources { 
+            srcDir "src/main/resources"	
+        } 
+    }	
 }
 
 jar {
-	baseName = 'TSPEADemo'
-	version = '0.0.1'
+    baseName = 'TSPEADemo'
+    version = '0.0.1'
 }
 
 task wrapper(type: Wrapper) {
-	gradleVersion = '2.1'
+    gradleVersion = '2.1'
 }
