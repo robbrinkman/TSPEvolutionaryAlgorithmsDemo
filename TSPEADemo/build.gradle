@@ -1,7 +1,7 @@
 apply plugin: 'java'
 apply plugin: 'application'
 
-mainClassName = 'nl.bknoppe¢r.tspeademo.backend.WebApp'
+mainClassName = 'nl.bknopper.tspeademo.backend.WebApp'
 
 repositories {
 	mavenLocal()
