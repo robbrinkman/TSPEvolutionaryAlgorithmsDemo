@@ -1,0 +1,169 @@
+<div id="page-wrapper">
+
+    <div class="container-fluid">
+
+        <div class="row" ng-if="backendErrors">
+            <div class="alert col-lg-12 alert-danger">
+                <strong>Warning</strong> Don't seem to have a connection to the backend...
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-gears fa-1x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div>Settings</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-footer">
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>Mutation Probability</label>
+                                        <input type="number" class="form-control" ng-change="setPresetToNone()"
+                                               ng-model="settings.selectedOption.settings.mutationProbability">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Nr of Generations</label>
+                                        <input type="number" class="form-control" ng-change="setPresetToNone()"
+                                               ng-model="settings.selectedOption.settings.nrOfGenerations">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Fitness Threshold</label>
+                                        <input type="number" class="form-control" ng-change="setPresetToNone()"
+                                               ng-model="settings.selectedOption.settings.fitnessThreshold">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>Population Size</label>
+                                        <input type="number" class="form-control" ng-change="setPresetToNone()"
+                                               ng-model="settings.selectedOption.settings.populationSize">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Parent Selection Size</label>
+                                        <input type="number" class="form-control" ng-change="setPresetToNone()"
+                                               ng-model="settings.selectedOption.settings.parentSelectionSize">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Parent Pool Size</label>
+                                        <input type="number" class="form-control" ng-change="setPresetToNone()"
+                                               ng-model="settings.selectedOption.settings.parentPoolSize">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-play fa-1x"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-footer">
+                            <button type="start" class="btn btn-primary" ng-disabled="algorithmStillRunning"
+                                    ng-click="start()">
+                                <div class="col-xs-4">
+                                    <i class="fa fa-play fa-2x"></i>
+                                </div>
+                            </button>
+                            <button type="stop" class="btn btn-danger" ng-disabled="!algorithmStillRunning"
+                                    ng-click="stop()">
+                                <div class="col-xs-4">
+                                    <i class="fa fa-stop fa-2x"></i>
+                                </div>
+                            </button>
+                            <button type="reset" class="btn btn-info" ng-disabled="algorithmStillRunning"
+                                    ng-click="initialize()">
+                                <div class="col-xs-4">
+                                    <i class="fa fa-refresh fa-2x"></i>
+                                </div>
+                            </button>
+                            <select name="mySelect" id="mySelect"
+                                    ng-options="option.name for option in settings.availableOptions track by option.id"
+                                    ng-model="settings.selectedOption"></select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="col-lg-6">
+                        <div class="panel panel-danger">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-xs-3">
+                                        <i class="fa fa-child fa-5x"></i>
+                                    </div>
+                                    <div class="col-xs-9 text-right">
+                                        <div class="huge">{{run.generation}}</div>
+                                        <div>Generation</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="panel panel-success">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-xs-3">
+                                        <i class="fa fa-dashboard fa-5x"></i>
+                                    </div>
+                                    <div class="col-xs-9 text-right">
+                                        <div class="huge">{{run.bestFitness}}</div>
+                                        <div>Fitness (Distance)</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-red">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><i class="fa fa-long-arrow-right"></i> Fitness</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="flot-chart">
+                                <div class="flot-chart-content" id="flot-moving-line-chart"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <i class="fa fa-map fa-1x"></i>
+                        </div>
+                        <div class="col-xs-9 text-right">
+                            <div>Map</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-footer">
+                    <div id="map-canvas"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

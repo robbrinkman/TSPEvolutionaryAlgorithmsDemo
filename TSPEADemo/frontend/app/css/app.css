@@ -1,0 +1,13 @@
+body {
+}
+
+#mySelect {
+    margin-left: 85px;
+    height: 40px;
+    width: 150px
+}
+
+#map-canvas {
+    width: 100%;
+    height: 900px;
+}
