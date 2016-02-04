@@ -12,14 +12,14 @@ git clone https://github.com/bknopper/TSPEvolutionaryAlgorithmsDemo.git
 ### Running the Demo - Backend
 Because this demo uses [Gradle](https://gradle.org/) as package manager / build automation system and has the Gradle wrapper incorporated you can run the backend of this demo by simply executing the gradle wrapper.
 
-For example, from the TSPEADemo directory, run:
+For example, from the `TSPEADemo` directory, run:
 
 ```bash
 ./gradlew run
 ```
 This should start resolving all the dependency and start the backend of the demo for you using Spring Boot.
 
-### Running the Frontend
+### Running the Demo - Frontend
 Since the frontend is based on angular, we need some form of http serving. My favorite is the python SimpleHttpServer and you can let it start serving by running the following from the `TSPEADemo/frontend/app` dir:
 
 ```bash
