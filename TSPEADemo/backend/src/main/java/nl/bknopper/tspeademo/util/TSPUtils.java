@@ -39,10 +39,10 @@ public final class TSPUtils {
     }
 
     public static final List<City> getRandomizedCities() {
-	List<City> citiesList = Arrays.asList(Arrays.copyOf(cities,
-		cities.length));
-	Collections.shuffle(citiesList);
-	return citiesList;
+		List<City> citiesList = Arrays.asList(Arrays.copyOf(cities,
+			cities.length));
+		Collections.shuffle(citiesList);
+		return citiesList;
     }
 
     public static City getBaseCity() {

@@ -15,14 +15,7 @@ dependencies {
     compile "org.jogamp.gluegen:gluegen-rt-main:2.2.1"
     compile "org.jogamp.jogl:jogl-all-main:2.2.1"
     compile "org.springframework.boot:spring-boot-starter-web:1.2.5.RELEASE"
-}
-
-sourceSets { 
-    main {
-        resources { 
-            srcDir "src/main/resources"	
-        } 
-    }	
+    compile "org.projectlombok:lombok:1.16.6"
 }
 
 jar {
