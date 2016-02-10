@@ -1,16 +1,3 @@
-/*
- * NCIM Groep
- * 
- * Created on : 
- * Author     : Bas W. Knopper
- * 
- * This class is used for the JavaOne Demo on 09/24/2013
- * for the following session: 
- * 
- * Evolutionary Algorithms: The Key to Solving Complex Java Puzzles [BOF2913]
- *
- */
-
 package nl.bknopper.tspeademo.ea;
 
 import java.util.ArrayList;

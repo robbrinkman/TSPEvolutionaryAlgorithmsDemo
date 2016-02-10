@@ -1,8 +1,6 @@
 package nl.bknopper.tspeademo.ea;
 
 
-import nl.bknopper.tspeademo.gui.TSPEADemo;
-
 public class AlgorithmRunner {
 
     private static Algorithm algorithm;
@@ -10,8 +8,8 @@ public class AlgorithmRunner {
     private AlgorithmRunner() {
     }
 
-    public synchronized static void startAlgorithm(TSPEADemo demo, AlgorithmOptions options) {
-        algorithm = new Algorithm(demo, options.getMutationProbability(),
+    public synchronized static void startAlgorithm(AlgorithmOptions options) {
+        algorithm = new Algorithm(options.getMutationProbability(),
                 options.getPopulationSize(),
                 options.getNrOfGenerations(),
                 options.getFitnessThreshold(),

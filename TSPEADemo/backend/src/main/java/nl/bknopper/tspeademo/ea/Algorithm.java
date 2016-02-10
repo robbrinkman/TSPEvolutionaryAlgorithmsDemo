@@ -1,16 +1,3 @@
-/*
- * NCIM Groep
- * 
- * Created on : 
- * Author     : Bas W. Knopper
- * 
- * This class is used for the JavaOne Demo on 09/24/2013
- * for the following session: 
- * 
- * Evolutionary Algorithms: The Key to Solving Complex Java Puzzles [BOF2913]
- *
- */
-
 package nl.bknopper.tspeademo.ea;
 
 import java.util.ArrayList;
@@ -18,15 +5,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import nl.bknopper.tspeademo.gui.TSPEADemo;
 import nl.bknopper.tspeademo.util.TSPUtils;
 
 public class Algorithm {
-
-    /**
-     * Our connection to the demo (view)
-     */
-    private TSPEADemo view;
 
     /**
      * Population of the algorithm
@@ -72,7 +53,6 @@ public class Algorithm {
     /**
      * Constructor for the Evolutionary Algorithm
      *
-     * @param view
      * @param mutationProbability
      * @param populationSize
      * @param nrOfGenerations
@@ -80,10 +60,9 @@ public class Algorithm {
      * @param parentSelectionSize
      * @param parentPoolSize
      */
-    public Algorithm(TSPEADemo view, int mutationProbability,
+    public Algorithm(int mutationProbability,
                      int populationSize, int nrOfGenerations, int fitnessThreshold,
                      int parentSelectionSize, int parentPoolSize) {
-        this.view = view;
         this.mutationProbability = mutationProbability;
         this.populationSize = populationSize;
         this.nrOfGenerations = nrOfGenerations;
@@ -110,11 +89,6 @@ public class Algorithm {
                 CandidateSolution bestCandidateSolution = population.get(0);
 
                 int generations = 0;
-
-		        /* show the current best candidate solution on the demo screen */
-                if(view != null) {
-                    view.showLastGeneration(bestCandidateSolution, generations);
-                }
 
 		        /* start the iterative part of the algorithm */
                 while (generations != nrOfGenerations
@@ -171,9 +145,6 @@ public class Algorithm {
                         solution.setGeneration(generations);
                     }
                     System.out.println("Generations: " + generations);
-                    if(view != null) {
-                        view.showLastGeneration(population.get(0), generations);
-                    }
 
                     /*
                      * Sleep, so the Thread can be interrupted if needed and to
@@ -183,17 +154,8 @@ public class Algorithm {
                     try {
                         Thread.sleep(1);
                     } catch (InterruptedException e) {
-                        if(view != null) {
-                            view.reset();
-                            view.done();
-                        }
                         return;
                     }
-                }
-
-                /* we're done here */
-                if(view != null) {
-                    view.done();
                 }
             }
         });
@@ -275,18 +237,6 @@ public class Algorithm {
         }
 
         return populationTemp;
-    }
-
-    private void printPopulation() {
-
-        /*
-         * for (CandidateSolution candidateSolution : population) {
-         *
-         * System.out.println("CandidateSolution added to population: " +
-         * candidateSolution.toString()); }
-         *
-         * System.out.println("Population size: " + population.size());
-         */
     }
 
     /**

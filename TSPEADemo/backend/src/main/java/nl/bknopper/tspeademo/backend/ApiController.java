@@ -46,7 +46,7 @@ public class ApiController {
 
     @RequestMapping(value = "startAlgorithm", method = RequestMethod.POST)
     public void startAlgorithm(@RequestBody AlgorithmOptions options) {
-        AlgorithmRunner.startAlgorithm(null, options);
+        AlgorithmRunner.startAlgorithm(options);
     }
 
     @RequestMapping(value = "stopAlgorithm", method = RequestMethod.POST)

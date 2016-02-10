@@ -1,32 +1,10 @@
-/*
- * NCIM Groep
- * 
- * Created on : 
- * Author     : Niels van Eijck
- * 
- * This class is used for the JavaOne Demo on 09/24/2013
- * for the following session: 
- * 
- * Evolutionary Algorithms: The Key to Solving Complex Java Puzzles [BOF2913]
- *
- */
-
 package nl.bknopper.tspeademo.util;
 
-import gov.nasa.worldwind.geom.LatLon;
-import gov.nasa.worldwind.layers.RenderableLayer;
-import gov.nasa.worldwind.render.BasicShapeAttributes;
-import gov.nasa.worldwind.render.Material;
-import gov.nasa.worldwind.render.ShapeAttributes;
-import gov.nasa.worldwind.render.SurfacePolyline;
+import nl.bknopper.tspeademo.domain.City;
 
-import java.awt.Color;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
-import nl.bknopper.tspeademo.domain.City;
 
 public final class TSPUtils {
 
@@ -65,45 +43,6 @@ public final class TSPUtils {
 		cities.length));
 	Collections.shuffle(citiesList);
 	return citiesList;
-    }
-
-    public static final long calculateTotalDistance(City[] cities) {
-	long total = 0;
-	for (int i = 0; i < cities.length; i++) {
-	    if (i == cities.length - 1) {
-		total += cities[i].calculateDistance(cities[0]);
-	    } else {
-		total += cities[i].calculateDistance(cities[i + 1]);
-	    }
-	}
-	return total;
-    }
-
-    public static final RenderableLayer createCitiesLayer(String layerName) {
-	RenderableLayer layer = new RenderableLayer();
-	layer.setName(layerName);
-	layer.setPickEnabled(false);
-	return layer;
-    }
-
-    public static final void buildCitiesLayer(RenderableLayer layer,
-	    List<City> cities) {
-	ShapeAttributes foregroundAttrs = new BasicShapeAttributes();
-	foregroundAttrs.setOutlineMaterial(new Material(Color.YELLOW));
-	foregroundAttrs.setOutlineWidth(4);
-
-	List<LatLon> locations = new ArrayList<LatLon>();
-	for (City city : cities) {
-	    locations.add(LatLon.fromDegrees(city.getLatitude(),
-		    city.getLongitude()));
-	}
-
-	SurfacePolyline si1 = new SurfacePolyline(locations);
-	si1.setClosed(true);
-	si1.setAttributes(foregroundAttrs);
-
-	layer.removeAllRenderables();
-	layer.addRenderable(si1);
     }
 
     public static City getBaseCity() {
