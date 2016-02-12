@@ -121,7 +121,9 @@ public class Algorithm {
                     for(CandidateSolution solution : population) {
                         solution.setGeneration(generations);
                     }
-                    System.out.println("Generations: " + generations);
+                    if (generations % 100 == 0) {
+                        System.out.println("Generations: " + generations);
+                    }
 
                 }
                 running = false;
