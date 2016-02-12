@@ -9,6 +9,7 @@ import java.util.List;
 public class ParallelAlgorithmRunner implements AlgorithmRunner {
 
     private List<AlgorithmRunner> runners;
+    private int threads = 8;
 
     public ParallelAlgorithmRunner() {
     }
@@ -16,7 +17,7 @@ public class ParallelAlgorithmRunner implements AlgorithmRunner {
     @Override
     public synchronized void startAlgorithm(AlgorithmOptions options) {
         runners = new ArrayList<>();
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < threads; i++) {
             SingleThreadedAlgorithmRunner singleThreadedAlgorithmRunner = new SingleThreadedAlgorithmRunner();
             singleThreadedAlgorithmRunner.startAlgorithm(options);
             runners.add(singleThreadedAlgorithmRunner);

@@ -133,7 +133,7 @@ public class Algorithm {
     }
 
     private List<CandidateSolution> createOffspring(List<CandidateSolution> parents) {
-        List<CandidateSolution> offspring = new ArrayList<>();
+        List<CandidateSolution> offspring = new ArrayList<>(parents.size());
         for (int i = 0; i < parents.size(); i += 2) {
             CandidateSolution parent1 = parents.get(i);
             CandidateSolution parent2 = parents.get(i + 1);
@@ -186,7 +186,7 @@ public class Algorithm {
 
         List<CandidateSolution> tempPopulation = new ArrayList<CandidateSolution>(
                 population);
-        List<CandidateSolution> randomCandidates = new ArrayList<CandidateSolution>();
+        List<CandidateSolution> randomCandidates = new ArrayList<CandidateSolution>(parentPoolSize);
 
         Random random = new Random();
 
@@ -221,7 +221,7 @@ public class Algorithm {
     private List<CandidateSolution> initialisation() {
 
 	    /* initialize population list of CandidateSolutions */
-        List<CandidateSolution> populationTemp = new ArrayList<CandidateSolution>();
+        List<CandidateSolution> populationTemp = new ArrayList<CandidateSolution>(populationSize);
 
 	    /* create a populationSize amount of random CandidateSolutions (routes) */
         for (int i = 0; i < populationSize; i++) {
