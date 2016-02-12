@@ -144,6 +144,10 @@ angular.module('myApp').directive('demo', ['$routeParams', function ($routeParam
                 $scope.run = {"generation": 0, "bestFitness": 0};
 
             function setNewValues(response) {
+                if(!response.data) {
+                    return;
+                }
+
                 $scope.areas = response.data.route;
                 $scope.run.bestFitness = response.data.fitness;
                 $scope.run.generation = response.data.generation;
