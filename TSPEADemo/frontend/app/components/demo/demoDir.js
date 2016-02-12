@@ -134,7 +134,6 @@ angular.module('myApp').directive('demo', ['$routeParams', function ($routeParam
                 }
             ];
             $scope.setPresetToNone = function () {
-                console.log("change!");
                 $scope.settings.selectedOption = {
                     id: 0,
                     name: "none",

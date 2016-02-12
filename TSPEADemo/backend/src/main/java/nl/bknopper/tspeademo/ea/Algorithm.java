@@ -50,6 +50,8 @@ public class Algorithm {
      */
     private int parentPoolSize;
 
+    private volatile boolean running = true;
+
     /**
      * Constructor for the Evolutionary Algorithm
      *
@@ -92,7 +94,7 @@ public class Algorithm {
 
 		        /* start the iterative part of the algorithm */
                 while (generations != nrOfGenerations
-                        && population.get(0).getFitness() > fitnessThreshold) {
+                        && population.get(0).getFitness() > fitnessThreshold && running) {
 
 		            /* Select the parents for reproduction */
                     List<CandidateSolution> parents = parentSelection();
@@ -121,17 +123,8 @@ public class Algorithm {
                     }
                     System.out.println("Generations: " + generations);
 
-                    /*
-                     * Sleep, so the Thread can be interrupted if needed and to
-                     * make the progression of the algorithm easy on the eyes on
-                     * the demo screen
-                     */
-                    try {
-                        Thread.sleep(1);
-                    } catch (InterruptedException e) {
-                        return;
-                    }
                 }
+                running = false;
             }
         });
 
@@ -244,28 +237,21 @@ public class Algorithm {
      * Stops the algorithm
      */
     public void stopAlgorithm() {
-        algorithmThread.interrupt();
+        running = false;
     }
 
     /**
      * Returns the best route of the current population
      */
     public CandidateSolution getCurrentBest() throws IllegalStateException {
-        if(population == null || population.isEmpty()) {
-            throw new IllegalStateException("There is no algorithm running at this point in time!");
-        }
-
-        return population.get(0);
+        return population.isEmpty() ? null : population.get(0);
     }
 
     /**
      * Returns whether the algorithm is still running
      */
     public boolean isStillRunning() {
-        if (algorithmThread == null) {
-            throw new IllegalStateException("No Algorithm running at this point in time. Please start one.");
-        }
-        return algorithmThread.isAlive();
+        return running;
     }
 
 }

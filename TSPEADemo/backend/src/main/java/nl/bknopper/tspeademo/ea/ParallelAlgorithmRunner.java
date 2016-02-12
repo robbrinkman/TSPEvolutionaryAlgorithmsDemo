@@ -11,12 +11,12 @@ public class ParallelAlgorithmRunner implements AlgorithmRunner {
     private List<AlgorithmRunner> runners;
 
     public ParallelAlgorithmRunner() {
-        runners = new ArrayList<>();
     }
 
     @Override
     public synchronized void startAlgorithm(AlgorithmOptions options) {
-        for(int i = 0; i < 4; i++) {
+        runners = new ArrayList<>();
+        for (int i = 0; i < 4; i++) {
             SingleThreadedAlgorithmRunner singleThreadedAlgorithmRunner = new SingleThreadedAlgorithmRunner();
             singleThreadedAlgorithmRunner.startAlgorithm(options);
             runners.add(singleThreadedAlgorithmRunner);
@@ -38,7 +38,7 @@ public class ParallelAlgorithmRunner implements AlgorithmRunner {
                 CandidateSolution runnersBest = runner.getCurrentBest(forceRetrieval);
                 if(currentBest == null) {
                     currentBest = runnersBest;
-                } else if(runnersBest.compareTo(currentBest) > 0) {
+                } else if(runnersBest != null && runnersBest.compareTo(currentBest) > 0) {
                     currentBest = runnersBest;
                 }
             }
