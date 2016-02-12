@@ -9,6 +9,8 @@ import nl.bknopper.tspeademo.util.TSPUtils;
 
 public class Algorithm {
 
+    private static final Random RANDOM = new Random();
+
     /**
      * Population of the algorithm
      */
@@ -148,7 +150,7 @@ public class Algorithm {
             for (CandidateSolution child : children) {
 
                 /* probability to mutate */
-                if (new Random().nextInt(101) <= mutationProbability) {
+                if (RANDOM.nextInt(101) <= mutationProbability) {
                     child.mutate();
                 }
 
@@ -188,13 +190,11 @@ public class Algorithm {
                 population);
         List<CandidateSolution> randomCandidates = new ArrayList<CandidateSolution>();
 
-        Random random = new Random();
-
-	    /* create parent pool */
+        /* create parent pool */
         for (int i = 0; i < parentPoolSize; i++) {
 
 	        /* select a random candidate solution from the temp population */
-            int randomlySelectedIndex = random.nextInt(tempPopulation.size());
+            int randomlySelectedIndex = RANDOM.nextInt(tempPopulation.size());
             CandidateSolution randomSelection = tempPopulation
                     .get(randomlySelectedIndex);
 
