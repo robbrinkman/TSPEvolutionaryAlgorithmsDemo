@@ -9,7 +9,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 @EnableAutoConfiguration
-@ComponentScan
+@ComponentScan(basePackages = "nl.bknopper.tspeademo")
 @Configuration
 public class WebApp {
     @Bean

@@ -252,7 +252,7 @@ public class CandidateSolution implements Comparable<CandidateSolution> {
         double ownFitness = this.getFitness();
         double otherFitness = o.getFitness();
 
-	/* Remember: the lower the fitness the better in our case! */
+	    /* Remember: the lower the fitness the better in our case! */
 
         if (ownFitness > otherFitness) {
             return 1;

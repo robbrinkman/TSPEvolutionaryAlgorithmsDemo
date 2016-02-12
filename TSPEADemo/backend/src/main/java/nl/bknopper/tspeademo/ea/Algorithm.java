@@ -98,27 +98,8 @@ public class Algorithm {
                     List<CandidateSolution> parents = parentSelection();
 
                     /* Let the selected parents reproduce (recombine) */
-                    for (int i = 0; i < parents.size(); i += 2) {
-                        CandidateSolution parent1 = parents.get(i);
-                        CandidateSolution parent2 = parents.get(i + 1);
-
-                        List<CandidateSolution> children = parent1
-                                .recombine(parent2);
-
-                        /*
-                         * let the children mutate with probability
-                         * mutationProbability and add them to the population
-                         */
-                        for (CandidateSolution child : children) {
-
-			                /* probability to mutate */
-                            if (new Random().nextInt(101) <= mutationProbability) {
-                                child.mutate();
-                            }
-
-                            population.add(child);
-                        }
-                    }
+                    List<CandidateSolution> offspring = createOffspring(parents);
+                    population.addAll(offspring);
 
                     /*
                      * Since evaluation of candidate solutions is done within
@@ -132,12 +113,6 @@ public class Algorithm {
                      * (CandidateSolutions) progress to the next generation
                      */
                     selectSurvivors();
-
-                    /*
-                     * Sort the population so that the best candidates are up
-                     * front
-                     */
-                    Collections.sort(population);
 
                     generations++;
 
@@ -162,6 +137,32 @@ public class Algorithm {
 
 	    /* start the above defined algorithm */
         algorithmThread.start();
+    }
+
+    private List<CandidateSolution> createOffspring(List<CandidateSolution> parents) {
+        List<CandidateSolution> offspring = new ArrayList<>();
+        for (int i = 0; i < parents.size(); i += 2) {
+            CandidateSolution parent1 = parents.get(i);
+            CandidateSolution parent2 = parents.get(i + 1);
+
+            List<CandidateSolution> children = parent1
+                    .recombine(parent2);
+
+            /*
+             * let the children mutate with probability
+             * mutationProbability and add them to the population
+             */
+            for (CandidateSolution child : children) {
+
+                /* probability to mutate */
+                if (new Random().nextInt(101) <= mutationProbability) {
+                    child.mutate();
+                }
+
+                offspring.add(child);
+            }
+        }
+        return offspring;
     }
 
     /**
