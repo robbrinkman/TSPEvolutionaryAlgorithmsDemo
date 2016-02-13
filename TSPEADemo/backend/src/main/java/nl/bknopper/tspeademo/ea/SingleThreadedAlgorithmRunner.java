@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class SingleThreadedAlgorithmRunner implements AlgorithmRunner {
 
-    private static Algorithm algorithm;
+    private Algorithm algorithm;
 
     public SingleThreadedAlgorithmRunner() {
     }
