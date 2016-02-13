@@ -16,7 +16,7 @@ public class ParallelAlgorithmRunner implements AlgorithmRunner {
 
     @Override
     public synchronized void startAlgorithm(AlgorithmOptions options) {
-        runners = new ArrayList<>();
+        runners = new ArrayList<>(threads);
         for (int i = 0; i < threads; i++) {
             SingleThreadedAlgorithmRunner singleThreadedAlgorithmRunner = new SingleThreadedAlgorithmRunner();
             singleThreadedAlgorithmRunner.startAlgorithm(options);
