@@ -124,7 +124,7 @@ public class Algorithm {
                         solution.setGeneration(generations);
                     }
                     if (generations % 100 == 0) {
-                        System.out.println("Generations: " + generations);
+                        System.out.println("Thread: " + Thread.currentThread().getName()+ ", Generations: " + generations);
                     }
 
                 }
