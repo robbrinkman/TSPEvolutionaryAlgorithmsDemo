@@ -59,6 +59,16 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="form-group">
+                                        <label>Algorithm Style</label>
+                                        <select class="form-control" name="algorithmStyle" id="algorithmStyle"
+                                                ng-options="option.name for option in settings.availableAlgorithmStyles track by option.id"
+                                                ng-model="settings.selectedAlgorithmStyle"></select>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

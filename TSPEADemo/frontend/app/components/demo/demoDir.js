@@ -90,6 +90,16 @@ angular.module('myApp').directive('demo', ['$routeParams', function ($routeParam
                     "parentPoolSize": 100
                 }
             };
+            $scope.settings.availableAlgorithmStyles = [
+                {
+                    id: 0,
+                    name: "single-threaded"
+                },
+                {
+                    id: 1,
+                    name: "parallel"
+                }];
+            $scope.settings.selectedAlgorithmStyle = $scope.settings.availableAlgorithmStyles[0];
             $scope.settings.availableOptions = [
                 {
                     id: 0,
@@ -182,6 +192,7 @@ angular.module('myApp').directive('demo', ['$routeParams', function ($routeParam
 
             $scope.start = function () {
                 var body = $scope.settings.selectedOption.settings;
+                body.algorithmStyle = $scope.settings.selectedAlgorithmStyle.name;
 
                 $scope.startAlgorithm(body).then(function () {
                     $scope.algorithmStillRunning = true;

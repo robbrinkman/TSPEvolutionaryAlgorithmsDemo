@@ -1,10 +1,7 @@
 package nl.bknopper.tspeademo.backend;
 
 import nl.bknopper.tspeademo.domain.City;
-import nl.bknopper.tspeademo.ea.AlgorithmOptions;
-import nl.bknopper.tspeademo.ea.ParallelAlgorithmRunner;
-import nl.bknopper.tspeademo.ea.SingleThreadedAlgorithmRunner;
-import nl.bknopper.tspeademo.ea.CandidateSolution;
+import nl.bknopper.tspeademo.ea.*;
 import nl.bknopper.tspeademo.util.TSPUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -17,8 +14,7 @@ import java.util.UUID;
 @RequestMapping("/api")
 public class ApiController {
 
-    @Autowired
-    ParallelAlgorithmRunner runner;
+    private AlgorithmRunner runner;
 
     private static final SimpleDateFormat FORMAT = new SimpleDateFormat("yyyy-MM-dd-HHmm");
 
@@ -52,6 +48,16 @@ public class ApiController {
 
     @RequestMapping(value = "startAlgorithm", method = RequestMethod.POST)
     public void startAlgorithm(@RequestBody AlgorithmOptions options) {
+        if (runner != null) {
+            runner.stopAlgorithm();
+        }
+        switch(options.getAlgorithmStyle()) {
+            case "single-threaded":
+                runner = new SingleThreadedAlgorithmRunner();
+                break;
+            case "parallel":
+                runner = new ParallelAlgorithmRunner();
+        }
         runner.startAlgorithm(options);
     }
 
