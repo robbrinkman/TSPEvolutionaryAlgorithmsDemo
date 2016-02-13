@@ -141,6 +141,18 @@ angular.module('myApp').directive('demo', ['$routeParams', function ($routeParam
                         "parentSelectionSize": 6,
                         "parentPoolSize": 10
                     }
+                },
+                {
+                    id: 4,
+                    name: "really high",
+                    settings: {
+                        "mutationProbability": 25,
+                        "populationSize": 50000,
+                        "nrOfGenerations": 5000,
+                        "fitnessThreshold": 11000,
+                        "parentSelectionSize": 6000,
+                        "parentPoolSize": 10000
+                    }
                 }
             ];
             $scope.setPresetToNone = function () {
