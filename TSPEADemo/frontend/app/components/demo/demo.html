@@ -165,5 +165,53 @@
                 </div>
             </div>
         </div>
+
+        <div class="col-lg-8" ngShow="useFirebase">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <i class="fa fa-history fa-1x"></i>
+                        </div>
+                        <div class="col-xs-9 text-right">
+                            <div>Top 10 Algorithm Runs</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+
+                        <table class="table table-striped">
+                            <thead>
+                            <th>#</th>
+                            <th>Best Fitness</th>
+                            <th># Generations</th>
+                            <th>Preset</th>
+                            <th>AlgorithmStyle</th>
+                            <th>Population Size</th>
+                            <th>Parent Selection Size</th>
+                            <th>Mutation Probability</th>
+                            <th>Parent Pool Size</th>
+                            <th>Fitness Threshold</th>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="algorithmResult in history">
+                                <td>{{$index + 1}}</td>
+                                <td>{{algorithmResult.fitness}}</td>
+                                <td>{{algorithmResult.generation}}</td>
+                                <td>{{algorithmResult.settings.name}}</td>
+                                <td>{{algorithmResult.settings.settings.algorithmStyle}}</td>
+                                <td>{{algorithmResult.settings.settings.populationSize}}</td>
+                                <td>{{algorithmResult.settings.settings.parentSelectionSize}}</td>
+                                <td>{{algorithmResult.settings.settings.mutationProbability}}</td>
+                                <td>{{algorithmResult.settings.settings.parentPoolSize}}</td>
+                                <td>{{algorithmResult.settings.settings.fitnessThreshold}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
