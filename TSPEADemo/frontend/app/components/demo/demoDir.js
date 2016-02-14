@@ -6,6 +6,41 @@ angular.module('myApp').directive('demo', ['$routeParams', function ($routeParam
         scope: {},
         controller: function ($scope, $log, $rootScope, $location, $http, $timeout) {
 
+            $scope.useFirebase = false;
+            var firebaseURL = "";
+            var firebaseRef;
+
+            $http.get('demo.properties').then(function (response) {
+                $scope.useFirebase = response.data.useFirebase;
+                firebaseURL = response.data.firebaseURL;
+
+                if($scope.useFirebase) {
+                    firebaseRef = new Firebase(firebaseURL);
+                    $scope.updateHistory();
+                }
+            }, function() {
+                // no demo.properties file. It's fine, we'll use defaults.
+            });
+
+            $scope.history = [];
+
+            $scope.updateHistory = function() {
+                firebaseRef.once("value", function(data) {
+                    var dataSnapshot = data.val();
+                    var history = [];
+                    angular.forEach(dataSnapshot, function(value, key) {
+                        var algorithmResult = value.algorithmResult;
+                        history.push(algorithmResult);
+                    });
+                    $scope.$apply(function() {
+                       history.sort(function(a, b) {
+                           return parseInt(a.fitness) - parseInt(b.fitness);
+                       });
+                       $scope.history = history.slice(0,10);
+                    });
+                });
+            };
+
             $scope.backendErrors = false;
 
             var container = $("#flot-moving-line-chart");
@@ -173,6 +208,15 @@ angular.module('myApp').directive('demo', ['$routeParams', function ($routeParam
                     // try to get the last rating
                     $http.get('http://localhost:8080/api/latestBest').then(function (response) {
                         setNewValues(response);
+                        var algorithmResult = response.data;
+
+                        if(useFirebase) {
+                            algorithmResult.settings = $scope.settings.selectedOption;
+                            algorithmResult.algorithmStyle = $scope.settings.selectedAlgorithmStyle;
+
+                            firebaseRef.push({algorithmResult: algorithmResult});
+                            $scope.updateHistory();
+                        }
                     });
                 });
             };

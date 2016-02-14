@@ -29,9 +29,18 @@ Since the frontend is based on angular, we need some form of http serving. My fa
 ```bash
 python -m SimpleHTTPServer 8001
 ```
+### Storing runs using Firebase
+If you have a Firebase account and would like to store runs and show the 10 latest best, you can add a `demo.properties` file in the `frontend/app` dir with the following content:
 
+```json
+{
+  "useFirebase": true,
+  "firebaseURL": "https://yoururlhere.firebaseio.com/algorithmResults"
+}
+```
+
+### Have fun!
 That's it! Now you can navigate to `http://localhost:8001` to start playing. 
-
 
 Have fun!
 
