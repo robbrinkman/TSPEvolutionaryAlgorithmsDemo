@@ -1,10 +1,9 @@
 package nl.bknopper.tspeademo.backend;
 
 import nl.bknopper.tspeademo.domain.City;
-import nl.bknopper.tspeademo.ea.AlgorithmOptions;
-import nl.bknopper.tspeademo.ea.AlgorithmRunner;
-import nl.bknopper.tspeademo.ea.CandidateSolution;
+import nl.bknopper.tspeademo.ea.*;
 import nl.bknopper.tspeademo.util.TSPUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
@@ -14,6 +13,9 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api")
 public class ApiController {
+
+    private AlgorithmRunner runner;
+
     private static final SimpleDateFormat FORMAT = new SimpleDateFormat("yyyy-MM-dd-HHmm");
 
     @RequestMapping(value = "message", method = RequestMethod.GET)
@@ -26,12 +28,12 @@ public class ApiController {
 
     @RequestMapping(value = "currentBest", method = RequestMethod.GET)
     public CandidateSolution currentBest() {
-        return AlgorithmRunner.getCurrentBest(false);
+        return runner.getCurrentBest(false);
     }
 
     @RequestMapping(value = "latestBest", method = RequestMethod.GET)
     public CandidateSolution getLatestBest() {
-        return AlgorithmRunner.getCurrentBest(true);
+        return runner.getCurrentBest(true);
     }
 
     @RequestMapping(value = "getCities", method = RequestMethod.GET)
@@ -41,17 +43,27 @@ public class ApiController {
 
     @RequestMapping(value = "stillRunning", method = RequestMethod.GET)
     public Boolean stillRunning() {
-        return AlgorithmRunner.isStillRunning();
+        return runner.isStillRunning();
     }
 
     @RequestMapping(value = "startAlgorithm", method = RequestMethod.POST)
     public void startAlgorithm(@RequestBody AlgorithmOptions options) {
-        AlgorithmRunner.startAlgorithm(options);
+        if (runner != null) {
+            runner.stopAlgorithm();
+        }
+        switch(options.getAlgorithmStyle()) {
+            case "single-threaded":
+                runner = new SingleThreadedAlgorithmRunner();
+                break;
+            case "parallel":
+                runner = new ParallelAlgorithmRunner();
+        }
+        runner.startAlgorithm(options);
     }
 
     @RequestMapping(value = "stopAlgorithm", method = RequestMethod.POST)
     public void stopAlgorithm() {
-        AlgorithmRunner.stopAlgorithm();
+        runner.stopAlgorithm();
     }
 
 

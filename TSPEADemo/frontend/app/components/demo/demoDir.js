@@ -125,6 +125,16 @@ angular.module('myApp').directive('demo', ['$routeParams', function ($routeParam
                     "parentPoolSize": 100
                 }
             };
+            $scope.settings.availableAlgorithmStyles = [
+                {
+                    id: 0,
+                    name: "single-threaded"
+                },
+                {
+                    id: 1,
+                    name: "parallel"
+                }];
+            $scope.settings.selectedAlgorithmStyle = $scope.settings.availableAlgorithmStyles[0];
             $scope.settings.availableOptions = [
                 {
                     id: 0,
@@ -166,10 +176,21 @@ angular.module('myApp').directive('demo', ['$routeParams', function ($routeParam
                         "parentSelectionSize": 6,
                         "parentPoolSize": 10
                     }
+                },
+                {
+                    id: 4,
+                    name: "really high",
+                    settings: {
+                        "mutationProbability": 25,
+                        "populationSize": 50000,
+                        "nrOfGenerations": 5000,
+                        "fitnessThreshold": 11000,
+                        "parentSelectionSize": 6000,
+                        "parentPoolSize": 10000
+                    }
                 }
             ];
             $scope.setPresetToNone = function () {
-                console.log("change!");
                 $scope.settings.selectedOption = {
                     id: 0,
                     name: "none",
@@ -180,6 +201,10 @@ angular.module('myApp').directive('demo', ['$routeParams', function ($routeParam
                 $scope.run = {"generation": 0, "bestFitness": 0};
 
             function setNewValues(response) {
+                if(!response.data) {
+                    return;
+                }
+
                 $scope.areas = response.data.route;
                 $scope.run.bestFitness = response.data.fitness;
                 $scope.run.generation = response.data.generation;
@@ -225,6 +250,7 @@ angular.module('myApp').directive('demo', ['$routeParams', function ($routeParam
 
             $scope.start = function () {
                 var body = $scope.settings.selectedOption.settings;
+                body.algorithmStyle = $scope.settings.selectedAlgorithmStyle.name;
 
                 $scope.startAlgorithm(body).then(function () {
                     $scope.algorithmStillRunning = true;

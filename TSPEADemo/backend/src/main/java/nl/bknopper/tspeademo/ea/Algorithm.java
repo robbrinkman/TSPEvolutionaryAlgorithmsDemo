@@ -9,6 +9,8 @@ import nl.bknopper.tspeademo.util.TSPUtils;
 
 public class Algorithm {
 
+    private static final Random RANDOM = new Random();
+
     /**
      * Population of the algorithm
      */
@@ -49,6 +51,8 @@ public class Algorithm {
      * for reproduction (each generation)
      */
     private int parentPoolSize;
+
+    private volatile boolean running = true;
 
     /**
      * Constructor for the Evolutionary Algorithm
@@ -92,33 +96,14 @@ public class Algorithm {
 
 		        /* start the iterative part of the algorithm */
                 while (generations != nrOfGenerations
-                        && population.get(0).getFitness() > fitnessThreshold) {
+                        && population.get(0).getFitness() > fitnessThreshold && running) {
 
 		            /* Select the parents for reproduction */
                     List<CandidateSolution> parents = parentSelection();
 
                     /* Let the selected parents reproduce (recombine) */
-                    for (int i = 0; i < parents.size(); i += 2) {
-                        CandidateSolution parent1 = parents.get(i);
-                        CandidateSolution parent2 = parents.get(i + 1);
-
-                        List<CandidateSolution> children = parent1
-                                .recombine(parent2);
-
-                        /*
-                         * let the children mutate with probability
-                         * mutationProbability and add them to the population
-                         */
-                        for (CandidateSolution child : children) {
-
-			                /* probability to mutate */
-                            if (new Random().nextInt(101) <= mutationProbability) {
-                                child.mutate();
-                            }
-
-                            population.add(child);
-                        }
-                    }
+                    List<CandidateSolution> offspring = createOffspring(parents);
+                    population.addAll(offspring);
 
                     /*
                      * Since evaluation of candidate solutions is done within
@@ -133,35 +118,48 @@ public class Algorithm {
                      */
                     selectSurvivors();
 
-                    /*
-                     * Sort the population so that the best candidates are up
-                     * front
-                     */
-                    Collections.sort(population);
-
                     generations++;
 
                     for(CandidateSolution solution : population) {
                         solution.setGeneration(generations);
                     }
-                    System.out.println("Generations: " + generations);
-
-                    /*
-                     * Sleep, so the Thread can be interrupted if needed and to
-                     * make the progression of the algorithm easy on the eyes on
-                     * the demo screen
-                     */
-                    try {
-                        Thread.sleep(1);
-                    } catch (InterruptedException e) {
-                        return;
+                    if (generations % 100 == 0) {
+                        System.out.println("Thread: " + Thread.currentThread().getName()+ ", Generations: " + generations);
                     }
+
                 }
+                running = false;
             }
         });
 
 	    /* start the above defined algorithm */
         algorithmThread.start();
+    }
+
+    private List<CandidateSolution> createOffspring(List<CandidateSolution> parents) {
+        List<CandidateSolution> offspring = new ArrayList<>(parents.size());
+        for (int i = 0; i < parents.size(); i += 2) {
+            CandidateSolution parent1 = parents.get(i);
+            CandidateSolution parent2 = parents.get(i + 1);
+
+            List<CandidateSolution> children = parent1
+                    .recombine(parent2);
+
+            /*
+             * let the children mutate with probability
+             * mutationProbability and add them to the population
+             */
+            for (CandidateSolution child : children) {
+
+                /* probability to mutate */
+                if (RANDOM.nextInt(101) <= mutationProbability) {
+                    child.mutate();
+                }
+
+                offspring.add(child);
+            }
+        }
+        return offspring;
     }
 
     /**
@@ -192,15 +190,13 @@ public class Algorithm {
 
         List<CandidateSolution> tempPopulation = new ArrayList<CandidateSolution>(
                 population);
-        List<CandidateSolution> randomCandidates = new ArrayList<CandidateSolution>();
+        List<CandidateSolution> randomCandidates = new ArrayList<CandidateSolution>(parentPoolSize);
 
-        Random random = new Random();
-
-	    /* create parent pool */
+        /* create parent pool */
         for (int i = 0; i < parentPoolSize; i++) {
 
 	        /* select a random candidate solution from the temp population */
-            int randomlySelectedIndex = random.nextInt(tempPopulation.size());
+            int randomlySelectedIndex = RANDOM.nextInt(tempPopulation.size());
             CandidateSolution randomSelection = tempPopulation
                     .get(randomlySelectedIndex);
 
@@ -227,7 +223,7 @@ public class Algorithm {
     private List<CandidateSolution> initialisation() {
 
 	    /* initialize population list of CandidateSolutions */
-        List<CandidateSolution> populationTemp = new ArrayList<CandidateSolution>();
+        List<CandidateSolution> populationTemp = new ArrayList<CandidateSolution>(populationSize);
 
 	    /* create a populationSize amount of random CandidateSolutions (routes) */
         for (int i = 0; i < populationSize; i++) {
@@ -243,28 +239,21 @@ public class Algorithm {
      * Stops the algorithm
      */
     public void stopAlgorithm() {
-        algorithmThread.interrupt();
+        running = false;
     }
 
     /**
      * Returns the best route of the current population
      */
     public CandidateSolution getCurrentBest() throws IllegalStateException {
-        if(population == null || population.isEmpty()) {
-            throw new IllegalStateException("There is no algorithm running at this point in time!");
-        }
-
-        return population.get(0);
+        return population.isEmpty() ? null : population.get(0);
     }
 
     /**
      * Returns whether the algorithm is still running
      */
     public boolean isStillRunning() {
-        if (algorithmThread == null) {
-            throw new IllegalStateException("No Algorithm running at this point in time. Please start one.");
-        }
-        return algorithmThread.isAlive();
+        return running;
     }
 
 }

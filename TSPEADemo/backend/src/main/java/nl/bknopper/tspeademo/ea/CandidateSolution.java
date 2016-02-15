@@ -8,6 +8,8 @@ import nl.bknopper.tspeademo.domain.City;
 
 public class CandidateSolution implements Comparable<CandidateSolution> {
 
+    private static final Random RANDOM = new Random();
+
     /**
      * The route for the TSP
      */
@@ -123,7 +125,7 @@ public class CandidateSolution implements Comparable<CandidateSolution> {
         List<City> childRoute2 = new ArrayList<City>();
 
 	/* randomize cutIndex for "cross-and-fill point" */
-        int cutIndex = new Random().nextInt(parentRoute1.size());
+        int cutIndex = RANDOM.nextInt(parentRoute1.size());
 
 	/* get the first part of both parent routes using the cut index */
         List<City> partRoute1 = parentRoute1.subList(0, cutIndex);
@@ -202,15 +204,13 @@ public class CandidateSolution implements Comparable<CandidateSolution> {
     public void mutate() {
         // System.out.println(toString());
 
-        Random random = new Random();
-
 	/* randomly select two indices in the route */
-        int indexFirstCity = random.nextInt(visitingCities.size());
-        int indexSecondCity = random.nextInt(visitingCities.size());
+        int indexFirstCity = RANDOM.nextInt(visitingCities.size());
+        int indexSecondCity = RANDOM.nextInt(visitingCities.size());
 
 	/* Make sure they are different */
         while (indexFirstCity == indexSecondCity) {
-            indexSecondCity = random.nextInt(visitingCities.size());
+            indexSecondCity = RANDOM.nextInt(visitingCities.size());
         }
 
 	/* retrieve the Cities on the given indices */
@@ -252,7 +252,7 @@ public class CandidateSolution implements Comparable<CandidateSolution> {
         double ownFitness = this.getFitness();
         double otherFitness = o.getFitness();
 
-	/* Remember: the lower the fitness the better in our case! */
+	    /* Remember: the lower the fitness the better in our case! */
 
         if (ownFitness > otherFitness) {
             return 1;
