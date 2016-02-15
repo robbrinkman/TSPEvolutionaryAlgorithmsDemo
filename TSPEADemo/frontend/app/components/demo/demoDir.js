@@ -212,7 +212,9 @@ angular.module('myApp').directive('demo', ['$routeParams', function ($routeParam
 
                         if($scope.useFirebase) {
                             algorithmResult.settings = $scope.settings.selectedOption;
-                            algorithmResult.algorithmStyle = $scope.settings.selectedAlgorithmStyle;
+                            if(algorithmResult.algorithmStyle) {
+                                algorithmResult.algorithmStyle = $scope.settings.selectedAlgorithmStyle;
+                            }
 
                             firebaseRef.push({algorithmResult: algorithmResult});
                             $scope.updateHistory();
