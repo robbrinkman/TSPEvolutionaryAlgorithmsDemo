@@ -210,7 +210,7 @@ angular.module('myApp').directive('demo', ['$routeParams', function ($routeParam
                         setNewValues(response);
                         var algorithmResult = response.data;
 
-                        if(useFirebase) {
+                        if($scope.useFirebase) {
                             algorithmResult.settings = $scope.settings.selectedOption;
                             algorithmResult.algorithmStyle = $scope.settings.selectedAlgorithmStyle;
 
