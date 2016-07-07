@@ -24,11 +24,20 @@ For example, from the `TSPEADemo` directory, run:
 This should start resolving all the dependency and start the backend of the demo for you using Spring Boot.
 
 ### Running the Demo - Frontend
-Since the frontend is based on angular, we need some form of http serving. My favorite is the python SimpleHttpServer and you can let it start serving by running the following from the `TSPEADemo/frontend/app` dir:
+Since the frontend is based on angular, we need some form of http serving. My favorite is the python SimpleHttpServer and you can let it start serving by running the following from the `TSPEADemo/frontend/app` dir.
+
+For Python 2:
 
 ```bash
 python -m SimpleHTTPServer 8001
 ```
+
+For Python 3:
+
+```bash
+python -m http.server 8001
+```
+
 ### Storing runs using Firebase
 If you have a Firebase account and would like to store runs and show the 10 latest best, you can add a `demo.properties` file in the `frontend/app` dir with the following content:
 
