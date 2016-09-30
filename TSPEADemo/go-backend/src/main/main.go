@@ -20,12 +20,16 @@ import (
 var traveler Traveler
 
 func main() {
-
-
 	router := mux.NewRouter()
 	router.HandleFunc("/api/cities", ListCities)
 
 	// TODO reconsider api structure when all works
+	/* TODO suggest /api/travel
+		POST will start traveling
+		GET will return current and finished (true|false) until finished
+		DELETE will stop
+	 */
+
 	router.HandleFunc("/api/currentBest", CurrentBest)
 	router.HandleFunc("/api/latestBest", LatestBest)
 	router.HandleFunc("/api/stillRunning", StillRunning)
