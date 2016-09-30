@@ -8,9 +8,35 @@ type CandidateSolution struct {
 	Generation     int64
 }
 
-type CandidateSolutions []CandidateSolution
+func NewCandidateSolution(baseCity City, visitingCities []City) *CandidateSolution {
+	candidateSolution := new(CandidateSolution)
+	candidateSolution.BaseCity = baseCity
+	candidateSolution.VisitingCities = visitingCities
+	candidateSolution.Route = append(candidateSolution.Route, baseCity)
+	candidateSolution.Route = append(candidateSolution.Route, visitingCities...)
+	candidateSolution.Route = append(candidateSolution.Route, baseCity)
+	return candidateSolution
+}
 
-// TODO implement alternative for constructor
+
+// TODO Implement
+func (candidateSolution CandidateSolution) recombine(otherParent CandidateSolution) CandidateSolutions {
+	return CandidateSolutions{}
+}
+
+// TODO Implement
+func (candidateSolution CandidateSolution) crossFill(childRoute []City, parentRoute []City, cutIndex int32) {
+
+}
+
+// TODO Implement
+func (candidateSolution CandidateSolution) mutate() {
+
+}
+
+
+
+// TODO compareTo not implemented here, verify sorting
 
 
 // TODO optimize with caching on fitness, Memoize?
@@ -23,3 +49,5 @@ func (candidateSolution CandidateSolution) calculateFitness() float64 {
 	}
 	return totalDistance
 }
+
+type CandidateSolutions []CandidateSolution
