@@ -77,16 +77,23 @@ func LatestBest(response http.ResponseWriter, request *http.Request) {
 
 }
 func StillRunning(response http.ResponseWriter, request *http.Request) {
-	json.NewEncoder(response).Encode(traveler)
-
+	json.NewEncoder(response).Encode(traveler !=nil && traveler.Running)
 }
+
 func StartAlgorithm(response http.ResponseWriter, request *http.Request) {
-	traveler = startTraveler()
-
+	if (traveler != nil && traveler.Running) {
+		log.Println("Trying to start an running Traveler, skipping")
+	} else {
+		traveler = startTraveler()
+	}
 	json.NewEncoder(response).Encode(traveler)
-
 }
+
 func StopAlgorithm(response http.ResponseWriter, request *http.Request) {
-	traveler.stop()
+	if (traveler == nil || !traveler.Running) {
+		log.Println("Trying to stop an non-running Traveler, skipping")
+	} else {
+		traveler.stop()
+	}
 	json.NewEncoder(response).Encode(traveler)
 }
