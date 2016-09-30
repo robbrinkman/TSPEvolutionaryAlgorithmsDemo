@@ -14,7 +14,7 @@ import (
 // TODO investigate unit testing
 // TODO investigate naming conventions (methods lower?)
 
-// TODO add rest service
+// DONE add rest service for cities
 
 
 func main() {
