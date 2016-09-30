@@ -17,7 +17,7 @@ import (
 // DONE add rest service for cities
 // TODO implement runner using Go Routine And Channels : http://guzalexander.com/2013/12/06/golang-channels-tutorial.html
 
-var traveler = NewTraveler()
+var traveler *Traveler
 
 func main() {
 	router := mux.NewRouter()
@@ -69,9 +69,11 @@ func ListCities(response http.ResponseWriter, request *http.Request) {
 }
 
 func CurrentBest(response http.ResponseWriter, request *http.Request) {
+	json.NewEncoder(response).Encode(traveler)
 
 }
 func LatestBest(response http.ResponseWriter, request *http.Request) {
+	json.NewEncoder(response).Encode(traveler)
 
 }
 func StillRunning(response http.ResponseWriter, request *http.Request) {
@@ -79,9 +81,12 @@ func StillRunning(response http.ResponseWriter, request *http.Request) {
 
 }
 func StartAlgorithm(response http.ResponseWriter, request *http.Request) {
+	traveler = startTraveler()
+
 	json.NewEncoder(response).Encode(traveler)
 
 }
 func StopAlgorithm(response http.ResponseWriter, request *http.Request) {
-
+	traveler.stop()
+	json.NewEncoder(response).Encode(traveler)
 }
