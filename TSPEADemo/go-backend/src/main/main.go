@@ -15,20 +15,29 @@ import (
 // TODO investigate naming conventions (methods lower?)
 
 // DONE add rest service for cities
+// TODO implement runner using Go Routine And Channels : http://guzalexander.com/2013/12/06/golang-channels-tutorial.html
 
+var traveler Traveler
 
 func main() {
-	fs := http.FileServer(http.Dir("../frontend/app"))
+
 
 	router := mux.NewRouter()
-	router.HandleFunc("/api/cities", CityIndex)
+	router.HandleFunc("/api/cities", ListCities)
 
-	router.PathPrefix("/").Handler(fs)
+	// TODO reconsider api structure when all works
+	router.HandleFunc("/api/currentBest", CurrentBest)
+	router.HandleFunc("/api/latestBest", LatestBest)
+	router.HandleFunc("/api/stillRunning", StillRunning)
+	router.HandleFunc("/api/startAlgorithm", StartAlgorithm)
+	router.HandleFunc("/api/stopAlgorithm", StopAlgorithm)
+
+	router.PathPrefix("/").Handler(http.FileServer(http.Dir("../frontend/app")))
 
 	log.Fatal(http.ListenAndServe("localhost:3000", router))
 }
 
-func CityIndex(response http.ResponseWriter, request *http.Request) {
+func ListCities(response http.ResponseWriter, request *http.Request) {
 	response.Header().Set("Content-Type", "application/json")
 	cities := Cities{
 		City{Name: "Athens", Latitude: 37.975334, Longitude: 23.736151},
@@ -53,4 +62,23 @@ func CityIndex(response http.ResponseWriter, request *http.Request) {
 		City{Name: "Vienna", Latitude: 48.208176, Longitude: 16.373819},
 		City{Name: "Warsaw", Latitude: 52.229675, Longitude: 21.012230}};
 	json.NewEncoder(response).Encode(cities)
+}
+
+func CurrentBest(response http.ResponseWriter, request *http.Request) {
+
+}
+func LatestBest(response http.ResponseWriter, request *http.Request) {
+
+}
+func StillRunning(response http.ResponseWriter, request *http.Request) {
+	json.NewEncoder(response).Encode(traveler)
+
+}
+func StartAlgorithm(response http.ResponseWriter, request *http.Request) {
+	traveler = NewTraveler()
+	json.NewEncoder(response).Encode(traveler)
+
+}
+func StopAlgorithm(response http.ResponseWriter, request *http.Request) {
+
 }

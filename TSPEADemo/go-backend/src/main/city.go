@@ -9,6 +9,6 @@ type City struct {
 type Cities []City
 
 
-func (city City) calculateDistance(otherCity City) int32 {
+func (city City) calculateDistance(otherCity City) int {
 	return 10
 }

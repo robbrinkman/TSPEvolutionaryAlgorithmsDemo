@@ -8,8 +8,9 @@ type CandidateSolution struct {
 	Generation     int64
 }
 
-func NewCandidateSolution(baseCity City, visitingCities []City) *CandidateSolution {
-	candidateSolution := new(CandidateSolution)
+// TODO it seems like passing a pointer here is a more generic solution, don't know why (*CandidateSolution)
+func NewCandidateSolution(baseCity City, visitingCities []City) CandidateSolution {
+	candidateSolution := CandidateSolution{}
 	candidateSolution.BaseCity = baseCity
 	candidateSolution.VisitingCities = visitingCities
 	candidateSolution.Route = append(candidateSolution.Route, baseCity)
@@ -40,7 +41,7 @@ func (candidateSolution CandidateSolution) mutate() {
 
 
 // TODO optimize with caching on fitness, Memoize?
-func (candidateSolution CandidateSolution) calculateFitness() float64 {
+func (candidateSolution CandidateSolution) calculateFitness() int {
 	totalDistance := 0
 	for i := 0; i < (len(candidateSolution.Route) - 1); i++ {
 		city := candidateSolution.Route[i]
