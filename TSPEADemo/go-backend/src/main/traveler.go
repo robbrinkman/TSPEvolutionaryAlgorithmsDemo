@@ -19,18 +19,19 @@ type Traveler struct {
 // Start using a pointer so we can run a go routine on the actual travelr
 func startTraveler() *Traveler {
 
-	// Set to running
+	// Create new traveller and set to running
+	// TODO Should accept the config from the client side
+
 	traveler := Traveler{Running: true}
 	fmt.Println("start")
 	go func() {
+		// TODO actually do the genetic travelling here
 		for traveler.Running == true {
 			traveler.Value = rand.Float32()
 			fmt.Println(traveler.Value)
+
+			// Go is to fast so we sleep :)
 			time.Sleep(1000*time.Millisecond)
-			//if (traveler.Value<0.00000001) {
-			//	traveler.Running = false
-			//}
-			//time.Sleep(100 * time.Millisecond)
 		}
 	}()
 	return &traveler

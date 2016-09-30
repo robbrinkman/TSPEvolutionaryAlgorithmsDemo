@@ -3,9 +3,9 @@ package main
 import (
 	"log"
 	"net/http"
+	"encoding/json"
 
 	"github.com/gorilla/mux"
-	"encoding/json"
 )
 
 // TODO investigate project structure
