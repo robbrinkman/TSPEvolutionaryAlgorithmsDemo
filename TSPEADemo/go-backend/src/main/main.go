@@ -17,7 +17,7 @@ import (
 // DONE add rest service for cities
 // TODO implement runner using Go Routine And Channels : http://guzalexander.com/2013/12/06/golang-channels-tutorial.html
 
-var traveler *Traveler
+var algorithmRunner *AlgorithmRunner
 
 func main() {
 	router := mux.NewRouter()
@@ -69,31 +69,31 @@ func ListCities(response http.ResponseWriter, request *http.Request) {
 }
 
 func CurrentBest(response http.ResponseWriter, request *http.Request) {
-	json.NewEncoder(response).Encode(traveler)
+	json.NewEncoder(response).Encode(algorithmRunner)
 
 }
 func LatestBest(response http.ResponseWriter, request *http.Request) {
-	json.NewEncoder(response).Encode(traveler)
+	json.NewEncoder(response).Encode(algorithmRunner)
 
 }
 func StillRunning(response http.ResponseWriter, request *http.Request) {
-	json.NewEncoder(response).Encode(traveler !=nil && traveler.Running)
+	json.NewEncoder(response).Encode(algorithmRunner !=nil && algorithmRunner.Running)
 }
 
 func StartAlgorithm(response http.ResponseWriter, request *http.Request) {
-	if (traveler != nil && traveler.Running) {
+	if (algorithmRunner != nil && algorithmRunner.Running) {
 		log.Println("Trying to start an running Traveler, skipping")
 	} else {
-		traveler = startTraveler()
+		algorithmRunner = startAlgorithmRunner()
 	}
-	json.NewEncoder(response).Encode(traveler)
+	json.NewEncoder(response).Encode(algorithmRunner)
 }
 
 func StopAlgorithm(response http.ResponseWriter, request *http.Request) {
-	if (traveler == nil || !traveler.Running) {
+	if (algorithmRunner == nil || !algorithmRunner.Running) {
 		log.Println("Trying to stop an non-running Traveler, skipping")
 	} else {
-		traveler.stop()
+		algorithmRunner.stop()
 	}
-	json.NewEncoder(response).Encode(traveler)
+	json.NewEncoder(response).Encode(algorithmRunner)
 }
