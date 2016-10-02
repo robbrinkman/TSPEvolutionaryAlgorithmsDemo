@@ -1,18 +1,25 @@
 package main
 
-import "math/rand"
+import (
+	"math/rand"
+	"math"
+	"github.com/kellydunn/golang-geo"
+)
 
 type City struct {
 	Name      string
-	Latitude  float32
-	Longitude float32
+	Latitude  float64
+	Longitude float64
+}
+
+// TODO implement
+func (city City) calculateDistance(otherCity City) float64 {
+	cityPoint:= geo.NewPoint(city.Latitude, city.Longitude)
+	otherCityPoint:= geo.NewPoint(otherCity.Latitude, otherCity.Longitude)
+	return cityPoint.GreatCircleDistance(otherCityPoint)
 }
 
 type Cities []City
-
-func (city City) calculateDistance(otherCity City) int {
-	return 10
-}
 
 func (cities Cities) contains(city City) bool {
 	for _, c := range cities {
@@ -54,10 +61,14 @@ func getAllCities() Cities {
 }
 
 func getRandomizedCities() Cities {
-	cities:= getAllCities()
+	cities := getAllCities()
 	for i := range cities {
 		j := rand.Intn(i + 1)
 		cities[i], cities[j] = cities[j], cities[i]
 	}
 	return cities
+}
+
+func hsin(theta float64) float64 {
+	return math.Pow(math.Sin(theta / 2), 2)
 }

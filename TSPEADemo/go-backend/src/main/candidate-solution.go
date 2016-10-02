@@ -6,7 +6,7 @@ type CandidateSolution struct {
 	BaseCity       City
 	VisitingCities []City
 	Route          []City
-	Fitness        int
+	Fitness        float64
 	Generation     int
 }
 
@@ -116,8 +116,7 @@ func (candidateSolution CandidateSolution) mutate() {
 
 
 
-// TODO optimize with caching on fitness, Memoize? (https://godoc.org/github.com/BenLubar/memoize)
-func (candidateSolution CandidateSolution) getFitness() int {
+func (candidateSolution CandidateSolution) getFitness() float64 {
 	if (candidateSolution.Fitness == 0) {
 		candidateSolution.calculateFitness()
 	}
@@ -126,7 +125,7 @@ func (candidateSolution CandidateSolution) getFitness() int {
 
 
 func (candidateSolution CandidateSolution) calculateFitness()  {
-	totalDistance := 0
+	totalDistance:= float64(0)
 	for i := 0; i < (len(candidateSolution.Route) - 1); i++ {
 		city := candidateSolution.Route[i]
 		nextCity := candidateSolution.Route[i + 1]
