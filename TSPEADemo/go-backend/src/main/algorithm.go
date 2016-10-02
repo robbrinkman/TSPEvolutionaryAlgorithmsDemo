@@ -101,11 +101,12 @@ func (algorithm Algorithm) initialisation() CandidateSolutions {
 }
 
 // No ternary operator in Go :)
-func (algorithm Algorithm) getCurrentBest() {
+func (algorithm Algorithm) getCurrentBest() CandidateSolution {
 	if len(algorithm.population) > 0 {
 		return algorithm.population[0]
 	} else {
-		return nil
+		// TODO find nice solution to return something if no population
+		return CandidateSolution{}
 	}
 }
 

@@ -1,5 +1,7 @@
 package main
 
+import "math/rand"
+
 type CandidateSolution struct {
 	BaseCity       City
 	VisitingCities []City
@@ -22,12 +24,60 @@ func NewCandidateSolution(baseCity City, visitingCities []City) CandidateSolutio
 
 // TODO Implement
 func (candidateSolution CandidateSolution) recombine(otherParent CandidateSolution) CandidateSolutions {
-	return CandidateSolutions{}
+
+	/* get routes of both parents */
+	parentRoute1 := candidateSolution.VisitingCities
+	parentRoute2 := otherParent.VisitingCities
+
+	/* initialize the routes for the children */
+	// TODO skip init and create directly?
+	childRoute1 := make(Cities, len(parentRoute1))
+	childRoute2 := make(Cities, len(parentRoute1))
+
+	/* randomize cutIndex for "cross-and-fill point" */
+	cutIndex := int32(rand.Intn(len(parentRoute1)))
+
+	/* get the first part of both parent routes using the cut index */
+	partRoute1 := parentRoute1[:cutIndex]
+	partRoute2 := parentRoute2[:cutIndex]
+
+	/* copy the first part of the parents cut into the children */
+	copy(childRoute1, partRoute1)
+	copy(childRoute2, partRoute2)
+
+	/*
+	 * Now, the "difficult part". Check the rest of the route in the
+	 * crossing parent and add the cities that are not yet in the child (in
+	 * the order of the route of the crossing parent)
+	 */
+	candidateSolution.crossFill(childRoute1, parentRoute2, cutIndex)
+	candidateSolution.crossFill(childRoute2, parentRoute1, cutIndex)
+
+	/* create new children using the new children routes */
+	child1 := NewCandidateSolution(getBaseCity(), childRoute1);
+	child2 := NewCandidateSolution(getBaseCity(), childRoute2);
+
+	/* put the children in a list and return it */
+	return CandidateSolutions{child1, child2}
 }
+
+/**
+* Check the rest of the route in the crossing parent and add the cities
+* that are not yet in the child (in the order of the route of the crossing
+* parent)
+*/
 
 // TODO Implement
 func (candidateSolution CandidateSolution) crossFill(childRoute []City, parentRoute []City, cutIndex int32) {
+	/*
+	 * traverse the parent route from the cut index on and add every city
+	 * not yet in the child to the child
+	 */
 
+	/*
+	 * traverse the parent route from the start of the route and add every
+	 * city not yet in the child to the child
+	 */
 }
 
 // TODO Implement
@@ -37,11 +87,10 @@ func (candidateSolution CandidateSolution) mutate() {
 
 
 
-// TODO compareTo not implemented here, verify sorting
 
 
 // TODO optimize with caching on fitness, Memoize? (https://godoc.org/github.com/BenLubar/memoize)
-func (candidateSolution CandidateSolution) calculateFitness() int {
+func (candidateSolution CandidateSolution) getFitness() int {
 	totalDistance := 0
 	for i := 0; i < (len(candidateSolution.Route) - 1); i++ {
 		city := candidateSolution.Route[i]
@@ -60,10 +109,10 @@ func (candidateSolutions CandidateSolutions) Len() int {
 }
 
 func (candidateSolutions CandidateSolutions) Less(i int, j int) bool {
-	return candidateSolutions[i].calculateFitness() < candidateSolutions[j].calculateFitness()
+	return candidateSolutions[i].getFitness() < candidateSolutions[j].getFitness()
 }
 
-func (candidateSolutions CandidateSolutions) Swap(i int, j int)  {
+func (candidateSolutions CandidateSolutions) Swap(i int, j int) {
 	candidateSolutions[i], candidateSolutions[j] = candidateSolutions[j], candidateSolutions[i]
 }
 
