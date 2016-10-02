@@ -68,14 +68,14 @@ func (candidateSolution CandidateSolution) recombine(otherParent CandidateSoluti
 */
 
 // TODO I guess childRoute should be a pointer
-func (candidateSolution CandidateSolution) crossFill(childRoute []City, parentRoute []City, cutIndex int32) {
+func (candidateSolution CandidateSolution) crossFill(childRoute Cities, parentRoute []City, cutIndex int32) {
 	/*
 	 * traverse the parent route from the cut index on and add every city
 	 * not yet in the child to the child
 	 */
 	for i := cutIndex; cutIndex < int32(len(parentRoute)); i++ {
 		nextCityOnRoute := parentRoute[i]
-		if (contains(childRoute, nextCityOnRoute)) {
+		if (childRoute.contains(nextCityOnRoute)) {
 			childRoute = append(childRoute, nextCityOnRoute)
 		}
 	}
@@ -87,7 +87,7 @@ func (candidateSolution CandidateSolution) crossFill(childRoute []City, parentRo
 
 	for i := 0; i < int(cutIndex) ; i++ {
 		nextCityOnRoute := parentRoute[i]
-		if (contains(childRoute, nextCityOnRoute)) {
+		if (childRoute.contains(nextCityOnRoute)) {
 			childRoute = append(childRoute, nextCityOnRoute)
 		}
 	}
@@ -153,14 +153,5 @@ func (candidateSolutions CandidateSolutions) Swap(i int, j int) {
 	candidateSolutions[i], candidateSolutions[j] = candidateSolutions[j], candidateSolutions[i]
 }
 
-// Util functions
 
-func contains(cities Cities, city City) bool {
-	for _, c := range cities {
-		if c == city {
-			return true
-		}
-	}
-	return false
-}
 

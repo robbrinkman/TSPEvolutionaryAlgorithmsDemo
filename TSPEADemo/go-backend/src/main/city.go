@@ -14,6 +14,15 @@ func (city City) calculateDistance(otherCity City) int {
 	return 10
 }
 
+func (cities Cities) contains(city City) bool {
+	for _, c := range cities {
+		if c == city {
+			return true
+		}
+	}
+	return false
+}
+
 func getBaseCity() City {
 	return City{Name: "Amsterdam", Latitude: 52.370216, Longitude:4.89516}
 }
