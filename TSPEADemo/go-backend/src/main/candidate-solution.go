@@ -6,8 +6,8 @@ type CandidateSolution struct {
 	BaseCity       City
 	VisitingCities []City
 	Route          []City
-	Fitness        float64
-	Generation     int64
+	Fitness        int
+	Generation     int
 }
 
 // TODO it seems like passing a pointer here is a more generic solution, don't know why (*CandidateSolution)
@@ -67,22 +67,49 @@ func (candidateSolution CandidateSolution) recombine(otherParent CandidateSoluti
 * parent)
 */
 
-// TODO Implement
+// TODO I guess childRoute should be a pointer
 func (candidateSolution CandidateSolution) crossFill(childRoute []City, parentRoute []City, cutIndex int32) {
 	/*
 	 * traverse the parent route from the cut index on and add every city
 	 * not yet in the child to the child
 	 */
+	for i := cutIndex; cutIndex < int32(len(parentRoute)); i++ {
+		nextCityOnRoute := parentRoute[i]
+		if (contains(childRoute, nextCityOnRoute)) {
+			childRoute = append(childRoute, nextCityOnRoute)
+		}
+	}
 
 	/*
 	 * traverse the parent route from the start of the route and add every
 	 * city not yet in the child to the child
 	 */
+
+	for i := 0; i < int(cutIndex) ; i++ {
+		nextCityOnRoute := parentRoute[i]
+		if (contains(childRoute, nextCityOnRoute)) {
+			childRoute = append(childRoute, nextCityOnRoute)
+		}
+	}
 }
 
-// TODO Implement
 func (candidateSolution CandidateSolution) mutate() {
 
+	/* randomly select two indices in the route */
+	indexFirstCity:= int32(rand.Intn(len(candidateSolution.VisitingCities)))
+	indexSecondCity:= int32(rand.Intn(len(candidateSolution.VisitingCities)))
+
+	/* Make sure they are different */
+	for (indexFirstCity == indexSecondCity) {
+		indexSecondCity = int32(rand.Intn(len(candidateSolution.VisitingCities)))
+	}
+
+	/* Changer! */
+	candidateSolution.VisitingCities[indexFirstCity], candidateSolution.VisitingCities[indexSecondCity] = candidateSolution.VisitingCities[indexSecondCity], candidateSolution.VisitingCities[indexFirstCity]
+
+
+	// fitness changes. Since we are doing caching:
+	candidateSolution.calculateFitness()
 }
 
 
@@ -91,14 +118,24 @@ func (candidateSolution CandidateSolution) mutate() {
 
 // TODO optimize with caching on fitness, Memoize? (https://godoc.org/github.com/BenLubar/memoize)
 func (candidateSolution CandidateSolution) getFitness() int {
+	if (candidateSolution.Fitness == 0) {
+		candidateSolution.calculateFitness()
+	}
+	return candidateSolution.Fitness
+}
+
+
+func (candidateSolution CandidateSolution) calculateFitness()  {
 	totalDistance := 0
 	for i := 0; i < (len(candidateSolution.Route) - 1); i++ {
 		city := candidateSolution.Route[i]
 		nextCity := candidateSolution.Route[i + 1]
 		totalDistance += city.calculateDistance(nextCity)
 	}
-	return totalDistance
+	candidateSolution.Fitness = totalDistance
 }
+
+
 
 type CandidateSolutions []CandidateSolution
 
@@ -116,5 +153,14 @@ func (candidateSolutions CandidateSolutions) Swap(i int, j int) {
 	candidateSolutions[i], candidateSolutions[j] = candidateSolutions[j], candidateSolutions[i]
 }
 
+// Util functions
 
+func contains(cities Cities, city City) bool {
+	for _, c := range cities {
+		if c == city {
+			return true
+		}
+	}
+	return false
+}
 

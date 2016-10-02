@@ -105,7 +105,7 @@ func (algorithm Algorithm) getCurrentBest() CandidateSolution {
 	if len(algorithm.population) > 0 {
 		return algorithm.population[0]
 	} else {
-		// TODO find nice solution to return something if no population
+		// TODO find nice solution to return something if no population or throw exception
 		return CandidateSolution{}
 	}
 }
