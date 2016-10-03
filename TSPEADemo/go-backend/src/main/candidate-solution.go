@@ -5,8 +5,8 @@ import "math/rand"
 type CandidateSolution struct {
 	BaseCity       City
 	VisitingCities []City
-	Route          []City
-	Fitness        float64
+	Route          []City 	`json:"route"`
+	Fitness        float64  `json:"fitness"`
 	Generation     int
 }
 
@@ -23,7 +23,7 @@ func NewCandidateSolution(baseCity City, visitingCities []City) CandidateSolutio
 
 
 // TODO Implement
-func (candidateSolution CandidateSolution) recombine(otherParent CandidateSolution) CandidateSolutions {
+func (candidateSolution *CandidateSolution) recombine(otherParent CandidateSolution) CandidateSolutions {
 
 	/* get routes of both parents */
 	parentRoute1 := candidateSolution.VisitingCities
@@ -68,7 +68,7 @@ func (candidateSolution CandidateSolution) recombine(otherParent CandidateSoluti
 */
 
 // TODO I guess childRoute should be a pointer
-func (candidateSolution CandidateSolution) crossFill(childRoute Cities, parentRoute []City, cutIndex int32) {
+func (candidateSolution *CandidateSolution) crossFill(childRoute Cities, parentRoute []City, cutIndex int32) {
 	/*
 	 * traverse the parent route from the cut index on and add every city
 	 * not yet in the child to the child
@@ -93,7 +93,7 @@ func (candidateSolution CandidateSolution) crossFill(childRoute Cities, parentRo
 	}
 }
 
-func (candidateSolution CandidateSolution) mutate() {
+func (candidateSolution *CandidateSolution) mutate() {
 
 	/* randomly select two indices in the route */
 	indexFirstCity:= int32(rand.Intn(len(candidateSolution.VisitingCities)))
@@ -113,10 +113,7 @@ func (candidateSolution CandidateSolution) mutate() {
 }
 
 
-
-
-
-func (candidateSolution CandidateSolution) getFitness() float64 {
+func (candidateSolution *CandidateSolution) getFitness() float64 {
 	if (candidateSolution.Fitness == 0) {
 		candidateSolution.calculateFitness()
 	}
@@ -124,7 +121,7 @@ func (candidateSolution CandidateSolution) getFitness() float64 {
 }
 
 
-func (candidateSolution CandidateSolution) calculateFitness()  {
+func (candidateSolution *CandidateSolution) calculateFitness()  {
 	totalDistance:= float64(0)
 	for i := 0; i < (len(candidateSolution.Route) - 1); i++ {
 		city := candidateSolution.Route[i]
@@ -151,6 +148,3 @@ func (candidateSolutions CandidateSolutions) Less(i int, j int) bool {
 func (candidateSolutions CandidateSolutions) Swap(i int, j int) {
 	candidateSolutions[i], candidateSolutions[j] = candidateSolutions[j], candidateSolutions[i]
 }
-
-
-
