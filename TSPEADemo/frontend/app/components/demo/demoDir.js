@@ -201,6 +201,7 @@ angular.module('myApp').directive('demo', ['$routeParams', function ($routeParam
                 $scope.run = {"generation": 0, "bestFitness": 0};
 
             function setNewValues(response) {
+                console.log(response.data);
                 if(!response.data) {
                     return;
                 }
@@ -357,8 +358,9 @@ angular.module('myApp').directive('demo', ['$routeParams', function ($routeParam
                 $scope.fitnessPlot.plot.setData($scope.fitnessPlot.series);
                 $scope.fitnessPlot.plot.draw();
 
-                return $http.get('http://localhost:8080/api/getCities').then(function (response) {
+                return $http.get('http://localhost:8080/api/cities').then(function (response) {
                     $scope.areas = response.data;
+                    console.log($scope.areas);
                     $scope.updateRoute();
                 });
 

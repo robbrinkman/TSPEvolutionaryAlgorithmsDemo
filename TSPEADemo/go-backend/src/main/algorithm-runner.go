@@ -2,13 +2,11 @@ package main
 
 import (
 	"fmt"
-	"time"
-	"math/rand"
 )
 
 type AlgorithmRunner struct {
 	Running bool
-	Value   float32
+	Algorithm Algorithm
 }
 
 // TODO implement multi threading here
@@ -18,23 +16,19 @@ func startAlgorithmRunner() *AlgorithmRunner {
 
 	// Create new traveller and set to running
 	// TODO Should accept the config from the client side
-
+  algorithm := NewAlgorithm()
 	traveler := AlgorithmRunner{Running: true}
 	fmt.Println("start")
-	go func() {
-		// TODO actually do the genetic travelling here
-		for traveler.Running == true {
-			traveler.Value = rand.Float32()
-			fmt.Println(traveler.Value)
-
-			// Go is to fast so we sleep :)
-			time.Sleep(1000*time.Millisecond)
-		}
-	}()
+	traveler.Algorithm = algorithm
+	traveler.Algorithm.startAlgorithm()
 	return &traveler
 
 }
 
 func (traveler *AlgorithmRunner) stop() {
 	traveler.Running = false
+}
+
+func (traveler *AlgorithmRunner) getCurrentBest() *CandidateSolution {
+	return traveler.Algorithm.getCurrentBest()
 }

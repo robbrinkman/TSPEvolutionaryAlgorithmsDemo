@@ -4,7 +4,7 @@ import (
 	"log"
 	"net/http"
 	"encoding/json"
-
+  "fmt"
 	"github.com/gorilla/mux"
 )
 
@@ -37,7 +37,7 @@ func main() {
 
 	router.PathPrefix("/").Handler(http.FileServer(http.Dir("../frontend/app")))
 
-	log.Fatal(http.ListenAndServe("localhost:3000", router))
+	log.Fatal(http.ListenAndServe("localhost:8080", router))
 }
 
 func ListCities(response http.ResponseWriter, request *http.Request) {
@@ -47,12 +47,12 @@ func ListCities(response http.ResponseWriter, request *http.Request) {
 }
 
 func CurrentBest(response http.ResponseWriter, request *http.Request) {
-	json.NewEncoder(response).Encode(algorithmRunner)
-
+	json.NewEncoder(response).Encode(algorithmRunner.getCurrentBest())
 }
-func LatestBest(response http.ResponseWriter, request *http.Request) {
-	json.NewEncoder(response).Encode(algorithmRunner)
 
+func LatestBest(response http.ResponseWriter, request *http.Request) {
+	// TODO: This is just testing REST and FE
+	CurrentBest(response, request)
 }
 func StillRunning(response http.ResponseWriter, request *http.Request) {
 	json.NewEncoder(response).Encode(algorithmRunner !=nil && algorithmRunner.Running)
@@ -64,7 +64,6 @@ func StartAlgorithm(response http.ResponseWriter, request *http.Request) {
 	} else {
 		algorithmRunner = startAlgorithmRunner()
 	}
-	json.NewEncoder(response).Encode(algorithmRunner)
 }
 
 func StopAlgorithm(response http.ResponseWriter, request *http.Request) {
@@ -73,5 +72,4 @@ func StopAlgorithm(response http.ResponseWriter, request *http.Request) {
 	} else {
 		algorithmRunner.stop()
 	}
-	json.NewEncoder(response).Encode(algorithmRunner)
 }

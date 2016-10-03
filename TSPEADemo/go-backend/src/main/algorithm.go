@@ -1,6 +1,8 @@
 package main
 
 import (
+	"time"
+	"fmt"
 	"math/rand"
 	"sort"
 )
@@ -21,7 +23,29 @@ type Algorithm struct {
 	// TODO implement
 }
 
-func (algorithm Algorithm) createOffspring(parents CandidateSolutions) CandidateSolutions {
+func NewAlgorithm() Algorithm {
+	algorithm := Algorithm{}
+	algorithm.mutationProbability = 25
+	algorithm.populationSize = 50000
+	algorithm.nrOfGenerations = 5000
+	algorithm.fitnessThreshold = 6000
+	algorithm.parentSelectionSize = 6000
+	algorithm.parentPoolSize = 10000
+	return algorithm
+}
+
+func (algorithm *Algorithm) startAlgorithm() {
+	algorithm.population = algorithm.initialisation()
+	fmt.Println(algorithm.population)
+	go func() {
+		for i := 0; i < 10000000; i++ {
+			time.Sleep(100*time.Millisecond)
+			// TODO implement algorithm
+		}
+	}()
+}
+
+func (algorithm *Algorithm) createOffspring(parents CandidateSolutions) CandidateSolutions {
 	offspring := make(CandidateSolutions, len(parents))
 	for i := 0; i < len(parents); i += 2 {
 		parent1 := parents[i]
@@ -37,7 +61,7 @@ func (algorithm Algorithm) createOffspring(parents CandidateSolutions) Candidate
 	return offspring
 }
 
-func (algorithm Algorithm) shouldBeMutated() bool {
+func (algorithm *Algorithm) shouldBeMutated() bool {
 	return rand.Intn(101) <= algorithm.mutationProbability
 }
 
@@ -47,7 +71,7 @@ func (algorithm Algorithm) shouldBeMutated() bool {
 */
 // TODO Verify that we are really changing algorithm.population here
 // TODO could well be that we need a pointer instead of the current construction
-func (algorithm Algorithm) selectSurvivors() {
+func (algorithm *Algorithm) selectSurvivors() {
 	// sort population based on fitness
 	sort.Sort(algorithm.population)
 
@@ -59,7 +83,7 @@ func (algorithm Algorithm) selectSurvivors() {
 * Select the x best candidate solutions from a randomly selected pool from
 * the population
 */
-func (algorithm Algorithm) parentSelection() CandidateSolutions {
+func (algorithm *Algorithm) parentSelection() CandidateSolutions {
 	// TODO Verify if we need current len of just the fullsize from populationSize
 	tempPopulation := make(CandidateSolutions, len(algorithm.population))
 	copy(tempPopulation, algorithm.population)
@@ -90,7 +114,7 @@ func (algorithm Algorithm) parentSelection() CandidateSolutions {
 	return append(randomCandidates, randomCandidates[0:algorithm.parentSelectionSize]...)
 }
 
-func (algorithm Algorithm) initialisation() CandidateSolutions {
+func (algorithm *Algorithm) initialisation() CandidateSolutions {
 	tempPopulation := make(CandidateSolutions, algorithm.populationSize)
 
 	for i := 0; i < algorithm.populationSize; i++ {
@@ -101,13 +125,14 @@ func (algorithm Algorithm) initialisation() CandidateSolutions {
 }
 
 // No ternary operator in Go :)
-func (algorithm Algorithm) getCurrentBest() CandidateSolution {
+func (algorithm *Algorithm) getCurrentBest() *CandidateSolution {
 	if len(algorithm.population) > 0 {
-		return algorithm.population[0]
+		fmt.Println("DEZE PRINT NIET GOED OM DE EEN OF ANDERE REDEN")
+		fmt.Println(algorithm.population[0])
+		return &algorithm.population[0]
 	} else {
 		// TODO find nice solution to return something if no population or throw exception
-		return CandidateSolution{}
+		fmt.Println("Population NOT presetn")
+		return &CandidateSolution{}
 	}
 }
-
-
