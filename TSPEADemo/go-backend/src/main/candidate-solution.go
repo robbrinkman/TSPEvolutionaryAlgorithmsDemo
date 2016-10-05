@@ -18,6 +18,7 @@ func NewCandidateSolution(baseCity City, visitingCities []City) CandidateSolutio
 	candidateSolution.Route = append(candidateSolution.Route, baseCity)
 	candidateSolution.Route = append(candidateSolution.Route, visitingCities...)
 	candidateSolution.Route = append(candidateSolution.Route, baseCity)
+	candidateSolution.calculateFitness()
 	return candidateSolution
 }
 

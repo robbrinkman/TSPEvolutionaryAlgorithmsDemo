@@ -16,6 +16,7 @@ func startAlgorithmRunner() *AlgorithmRunner {
 
 	// Create new traveller and set to running
 	// TODO Should accept the config from the client side
+	fmt.Println("Starting Algorithm")
   algorithm := NewAlgorithm()
 	traveler := AlgorithmRunner{Running: true}
 	fmt.Println("start")
@@ -29,6 +30,6 @@ func (traveler *AlgorithmRunner) stop() {
 	traveler.Running = false
 }
 
-func (traveler *AlgorithmRunner) getCurrentBest() *CandidateSolution {
+func (traveler *AlgorithmRunner) getCurrentBest() CandidateSolution {
 	return traveler.Algorithm.getCurrentBest()
 }

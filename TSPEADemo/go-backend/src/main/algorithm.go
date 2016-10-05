@@ -38,6 +38,8 @@ func (algorithm *Algorithm) startAlgorithm() {
 	algorithm.population = algorithm.initialisation()
 	go func() {
 		for i := 0; i < 10000000; i++ {
+			fmt.Println(i)
+			algorithm.population[0] = NewCandidateSolution(getBaseCity(), getRandomizedCities())
 			time.Sleep(100*time.Millisecond)
 			// TODO implement algorithm
 		}
@@ -124,11 +126,12 @@ func (algorithm *Algorithm) initialisation() CandidateSolutions {
 }
 
 // No ternary operator in Go :)
-func (algorithm *Algorithm) getCurrentBest() *CandidateSolution {
+func (algorithm *Algorithm) getCurrentBest() CandidateSolution {
+	fmt.Println("getting current best")
 	if len(algorithm.population) > 0 {
-		return &algorithm.population[0]
+		return algorithm.population[0]
 	} else {
 		// TODO find nice solution to return something if no population or throw exception
-		return &CandidateSolution{}
+		return CandidateSolution{}
 	}
 }
