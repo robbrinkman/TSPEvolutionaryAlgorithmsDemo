@@ -36,7 +36,6 @@ func NewAlgorithm() Algorithm {
 
 func (algorithm *Algorithm) startAlgorithm() {
 	algorithm.population = algorithm.initialisation()
-	fmt.Println(algorithm.population)
 	go func() {
 		for i := 0; i < 10000000; i++ {
 			time.Sleep(100*time.Millisecond)
@@ -119,7 +118,7 @@ func (algorithm *Algorithm) initialisation() CandidateSolutions {
 
 	for i := 0; i < algorithm.populationSize; i++ {
 		candidateSolution := NewCandidateSolution(getBaseCity(), getRandomizedCities())
-		tempPopulation = append(tempPopulation, candidateSolution)
+		tempPopulation[i] = candidateSolution
 	}
 	return tempPopulation
 }
@@ -127,12 +126,9 @@ func (algorithm *Algorithm) initialisation() CandidateSolutions {
 // No ternary operator in Go :)
 func (algorithm *Algorithm) getCurrentBest() *CandidateSolution {
 	if len(algorithm.population) > 0 {
-		fmt.Println("DEZE PRINT NIET GOED OM DE EEN OF ANDERE REDEN")
-		fmt.Println(algorithm.population[0])
 		return &algorithm.population[0]
 	} else {
 		// TODO find nice solution to return something if no population or throw exception
-		fmt.Println("Population NOT presetn")
 		return &CandidateSolution{}
 	}
 }
