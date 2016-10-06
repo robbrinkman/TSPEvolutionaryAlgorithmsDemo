@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"encoding/json"
 	"github.com/gorilla/mux"
+	"net/http/pprof"
 )
 
 // TODO investigate project structure
@@ -34,13 +35,25 @@ func main() {
 	router.HandleFunc("/api/startAlgorithm", StartAlgorithm)
 	router.HandleFunc("/api/stopAlgorithm", StopAlgorithm)
 
+	AttachProfiler(router)
+	
 	router.PathPrefix("/").Handler(http.FileServer(http.Dir("../frontend/app")))
-
 
 	log.Fatal(http.ListenAndServe("localhost:8080", router))
 
+}
 
+func AttachProfiler(router *mux.Router) {
+	router.HandleFunc("/debug/pprof/", pprof.Index)
+	router.HandleFunc("/debug/pprof/cmdline", pprof.Cmdline)
+	router.HandleFunc("/debug/pprof/profile", pprof.Profile)
+	router.HandleFunc("/debug/pprof/symbol", pprof.Symbol)
 
+	// Manually add support for paths linked to by index page at /debug/pprof/
+	router.Handle("/debug/pprof/goroutine", pprof.Handler("goroutine"))
+	router.Handle("/debug/pprof/heap", pprof.Handler("heap"))
+	router.Handle("/debug/pprof/threadcreate", pprof.Handler("threadcreate"))
+	router.Handle("/debug/pprof/block", pprof.Handler("block"))
 }
 
 func ListCities(response http.ResponseWriter, request *http.Request) {
@@ -58,7 +71,7 @@ func LatestBest(response http.ResponseWriter, request *http.Request) {
 	CurrentBest(response, request)
 }
 func StillRunning(response http.ResponseWriter, request *http.Request) {
-	json.NewEncoder(response).Encode(algorithmRunner !=nil && algorithmRunner.Running)
+	json.NewEncoder(response).Encode(algorithmRunner != nil && algorithmRunner.Running)
 }
 
 func StartAlgorithm(response http.ResponseWriter, request *http.Request) {
