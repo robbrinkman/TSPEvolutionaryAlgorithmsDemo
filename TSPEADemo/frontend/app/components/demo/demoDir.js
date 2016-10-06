@@ -286,7 +286,7 @@ angular.module('myApp').directive('demo', ['$routeParams', function ($routeParam
 
                         $scope.flightPath.setMap($scope.map);
 
-                        $timeout($scope.updateCurrentBest, 250);
+                        $timeout($scope.updateCurrentBest, 1000);
                     });
                 }
             };

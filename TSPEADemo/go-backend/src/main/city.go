@@ -12,7 +12,6 @@ type City struct {
 	Longitude float64 `json:"longitude"`
 }
 
-// TODO implement
 func (city City) calculateDistance(otherCity City) float64 {
 	cityPoint:= geo.NewPoint(city.Latitude, city.Longitude)
 	otherCityPoint:= geo.NewPoint(otherCity.Latitude, otherCity.Longitude)

@@ -9,12 +9,11 @@ import (
 type CandidateSolution struct {
 	BaseCity       City
 	VisitingCities []City
-	Route          []City        `json:"route"`
-	Fitness        float64  `json:"fitness"`
-	Generation     int
+	Route          []City  	`json:"route"`
+	Fitness        float64	`json:"fitness"`
+	Generation     int      `json:"generation"`
 }
 
-// TODO it seems like passing a pointer here is a more generic solution, don't know why (*CandidateSolution)
 func NewCandidateSolution(baseCity City, visitingCities []City) CandidateSolution {
 	candidateSolution := CandidateSolution{}
 	candidateSolution.BaseCity = baseCity
@@ -27,7 +26,6 @@ func NewCandidateSolution(baseCity City, visitingCities []City) CandidateSolutio
 }
 
 
-// TODO Implement
 func (candidateSolution *CandidateSolution) recombine(otherParent CandidateSolution) CandidateSolutions {
 
 	/* get routes of both parents */
@@ -35,13 +33,11 @@ func (candidateSolution *CandidateSolution) recombine(otherParent CandidateSolut
 	parentRoute2 := otherParent.VisitingCities
 
 	/* randomize cutIndex for "cross-and-fill point" */
-	cutIndex :=  int32(rand.Intn(len(parentRoute1)))
+	cutIndex := int32(rand.Intn(len(parentRoute1)))
 
 	/* initialize the routes for the children */
 	childRoute1 := make(Cities, len(parentRoute1))
 	childRoute2 := make(Cities, len(parentRoute1))
-
-
 
 	/* get the first part of both parent routes using the cut index */
 	partRoute1 := parentRoute1[0:cutIndex]
@@ -50,7 +46,6 @@ func (candidateSolution *CandidateSolution) recombine(otherParent CandidateSolut
 	/* copy the first part of the parents cut into the children */
 	copy(childRoute1, partRoute1)
 	copy(childRoute2, partRoute2)
-
 
 	/*
 	 * Now, the "difficult part". Check the rest of the route in the
@@ -65,12 +60,11 @@ func (candidateSolution *CandidateSolution) recombine(otherParent CandidateSolut
 	child2 := NewCandidateSolution(getBaseCity(), childRoute2);
 
 	/* put the children in a list and return it */
-
 	return CandidateSolutions{child1, child2}
 }
 
 func (candidateSolution CandidateSolution) printRoute() {
-	cityNames:= make([]string, len(candidateSolution.VisitingCities))
+	cityNames := make([]string, len(candidateSolution.VisitingCities))
 	for i, city := range candidateSolution.VisitingCities {
 		cityNames[i] = city.Name
 	}
@@ -83,19 +77,18 @@ func (candidateSolution CandidateSolution) printRoute() {
 * parent)
 */
 
-// TODO I guess childRoute should be a pointer
 func (candidateSolution *CandidateSolution) crossFill(childRoute Cities, parentRoute []City, cutIndex int32) {
 	/*
 	 * traverse the parent route from the cut index on and add every city
 	 * not yet in the child to the child
 	 */
-	fillIndex := cutIndex
+	childRouteIndex := cutIndex
 
 	for i := cutIndex; i < int32(len(parentRoute)); i++ {
 		nextCityOnRoute := parentRoute[i]
 		if (!childRoute.contains(nextCityOnRoute)) {
-			childRoute[fillIndex] = nextCityOnRoute
-			fillIndex++
+			childRoute[childRouteIndex] = nextCityOnRoute
+			childRouteIndex++
 		}
 	}
 
@@ -107,8 +100,8 @@ func (candidateSolution *CandidateSolution) crossFill(childRoute Cities, parentR
 	for i := 0; i < int(cutIndex); i++ {
 		nextCityOnRoute := parentRoute[i]
 		if (!childRoute.contains(nextCityOnRoute)) {
-			childRoute[fillIndex] = nextCityOnRoute
-			fillIndex++
+			childRoute[childRouteIndex] = nextCityOnRoute
+			childRouteIndex++
 		}
 	}
 }
@@ -127,12 +120,11 @@ func (candidateSolution *CandidateSolution) mutate() {
 	/* Changer! */
 	candidateSolution.VisitingCities[indexFirstCity], candidateSolution.VisitingCities[indexSecondCity] = candidateSolution.VisitingCities[indexSecondCity], candidateSolution.VisitingCities[indexFirstCity]
 
-
-	// fitness changes. Since we are doing caching:
+	/* Recalculate the Fitness */
 	candidateSolution.calculateFitness()
 }
 
-func (candidateSolution *CandidateSolution) getFitness() float64 {
+func (candidateSolution *CandidateSolution) GetFitness() float64 {
 	if (candidateSolution.Fitness == 0) {
 		candidateSolution.calculateFitness()
 	}
@@ -158,7 +150,7 @@ func (candidateSolutions CandidateSolutions) Len() int {
 }
 
 func (candidateSolutions CandidateSolutions) Less(i int, j int) bool {
-	return candidateSolutions[i].getFitness() < candidateSolutions[j].getFitness()
+	return candidateSolutions[i].GetFitness() < candidateSolutions[j].GetFitness()
 }
 
 func (candidateSolutions CandidateSolutions) Swap(i int, j int) {
