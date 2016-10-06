@@ -1,11 +1,15 @@
 package main
 
-import "math/rand"
+import (
+	"math/rand"
+	"log"
+	"strings"
+)
 
 type CandidateSolution struct {
 	BaseCity       City
 	VisitingCities []City
-	Route          []City 	`json:"route"`
+	Route          []City        `json:"route"`
 	Fitness        float64  `json:"fitness"`
 	Generation     int
 }
@@ -30,21 +34,23 @@ func (candidateSolution *CandidateSolution) recombine(otherParent CandidateSolut
 	parentRoute1 := candidateSolution.VisitingCities
 	parentRoute2 := otherParent.VisitingCities
 
+	/* randomize cutIndex for "cross-and-fill point" */
+	cutIndex :=  int32(rand.Intn(len(parentRoute1)))
+
 	/* initialize the routes for the children */
-	// TODO skip init and create directly?
 	childRoute1 := make(Cities, len(parentRoute1))
 	childRoute2 := make(Cities, len(parentRoute1))
 
-	/* randomize cutIndex for "cross-and-fill point" */
-	cutIndex := int32(rand.Intn(len(parentRoute1)))
+
 
 	/* get the first part of both parent routes using the cut index */
-	partRoute1 := parentRoute1[:cutIndex]
-	partRoute2 := parentRoute2[:cutIndex]
+	partRoute1 := parentRoute1[0:cutIndex]
+	partRoute2 := parentRoute2[0:cutIndex]
 
 	/* copy the first part of the parents cut into the children */
 	copy(childRoute1, partRoute1)
 	copy(childRoute2, partRoute2)
+
 
 	/*
 	 * Now, the "difficult part". Check the rest of the route in the
@@ -59,7 +65,16 @@ func (candidateSolution *CandidateSolution) recombine(otherParent CandidateSolut
 	child2 := NewCandidateSolution(getBaseCity(), childRoute2);
 
 	/* put the children in a list and return it */
+
 	return CandidateSolutions{child1, child2}
+}
+
+func (candidateSolution CandidateSolution) printRoute() {
+	cityNames:= make([]string, len(candidateSolution.VisitingCities))
+	for i, city := range candidateSolution.VisitingCities {
+		cityNames[i] = city.Name
+	}
+	log.Printf("Route -> %s", strings.Join(cityNames, " -> "))
 }
 
 /**
@@ -74,10 +89,13 @@ func (candidateSolution *CandidateSolution) crossFill(childRoute Cities, parentR
 	 * traverse the parent route from the cut index on and add every city
 	 * not yet in the child to the child
 	 */
-	for i := cutIndex; cutIndex < int32(len(parentRoute)); i++ {
+	fillIndex := cutIndex
+
+	for i := cutIndex; i < int32(len(parentRoute)); i++ {
 		nextCityOnRoute := parentRoute[i]
-		if (childRoute.contains(nextCityOnRoute)) {
-			childRoute = append(childRoute, nextCityOnRoute)
+		if (!childRoute.contains(nextCityOnRoute)) {
+			childRoute[fillIndex] = nextCityOnRoute
+			fillIndex++
 		}
 	}
 
@@ -86,10 +104,11 @@ func (candidateSolution *CandidateSolution) crossFill(childRoute Cities, parentR
 	 * city not yet in the child to the child
 	 */
 
-	for i := 0; i < int(cutIndex) ; i++ {
+	for i := 0; i < int(cutIndex); i++ {
 		nextCityOnRoute := parentRoute[i]
-		if (childRoute.contains(nextCityOnRoute)) {
-			childRoute = append(childRoute, nextCityOnRoute)
+		if (!childRoute.contains(nextCityOnRoute)) {
+			childRoute[fillIndex] = nextCityOnRoute
+			fillIndex++
 		}
 	}
 }
@@ -97,8 +116,8 @@ func (candidateSolution *CandidateSolution) crossFill(childRoute Cities, parentR
 func (candidateSolution *CandidateSolution) mutate() {
 
 	/* randomly select two indices in the route */
-	indexFirstCity:= int32(rand.Intn(len(candidateSolution.VisitingCities)))
-	indexSecondCity:= int32(rand.Intn(len(candidateSolution.VisitingCities)))
+	indexFirstCity := int32(rand.Intn(len(candidateSolution.VisitingCities)))
+	indexSecondCity := int32(rand.Intn(len(candidateSolution.VisitingCities)))
 
 	/* Make sure they are different */
 	for (indexFirstCity == indexSecondCity) {
@@ -113,7 +132,6 @@ func (candidateSolution *CandidateSolution) mutate() {
 	candidateSolution.calculateFitness()
 }
 
-
 func (candidateSolution *CandidateSolution) getFitness() float64 {
 	if (candidateSolution.Fitness == 0) {
 		candidateSolution.calculateFitness()
@@ -121,9 +139,8 @@ func (candidateSolution *CandidateSolution) getFitness() float64 {
 	return candidateSolution.Fitness
 }
 
-
-func (candidateSolution *CandidateSolution) calculateFitness()  {
-	totalDistance:= float64(0)
+func (candidateSolution *CandidateSolution) calculateFitness() {
+	totalDistance := float64(0)
 	for i := 0; i < (len(candidateSolution.Route) - 1); i++ {
 		city := candidateSolution.Route[i]
 		nextCity := candidateSolution.Route[i + 1]
@@ -131,8 +148,6 @@ func (candidateSolution *CandidateSolution) calculateFitness()  {
 	}
 	candidateSolution.Fitness = totalDistance
 }
-
-
 
 type CandidateSolutions []CandidateSolution
 

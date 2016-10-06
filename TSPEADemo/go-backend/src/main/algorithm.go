@@ -1,10 +1,10 @@
 package main
 
 import (
-	"time"
 	"fmt"
 	"math/rand"
 	"sort"
+	"log"
 )
 
 // Moved all code related to running to the Algorithm Runner
@@ -13,9 +13,11 @@ type Algorithm struct {
 	mutationProbability int
 	populationSize      int
 	nrOfGenerations     int
-	fitnessThreshold    int
+	generations         int
+	fitnessThreshold    float64
 	parentSelectionSize int
 	parentPoolSize      int
+	running             bool
 
 	// Left out thread and running because this should be in the algoritm runner
 	// TODO verify need of overlap between options and algorithm
@@ -31,23 +33,52 @@ func NewAlgorithm() Algorithm {
 	algorithm.fitnessThreshold = 6000
 	algorithm.parentSelectionSize = 6000
 	algorithm.parentPoolSize = 10000
+	algorithm.running = false
 	return algorithm
 }
 
 func (algorithm *Algorithm) startAlgorithm() {
+
 	algorithm.population = algorithm.initialisation()
+	sort.Sort(algorithm.population)
+
 	go func() {
-		for i := 0; i < 10000000; i++ {
-			fmt.Println(i)
-			algorithm.population[0] = NewCandidateSolution(getBaseCity(), getRandomizedCities())
-			time.Sleep(100*time.Millisecond)
-			// TODO implement algorithm
+		algorithm.running = true
+
+
+		log.Printf("Initialized opulation of size: %d", len(algorithm.population))
+		for algorithm.generations = 0;
+			algorithm.generations != algorithm.nrOfGenerations  && algorithm.population[0].Fitness > algorithm.fitnessThreshold && algorithm.running;
+		{
+
+			parents := algorithm.parentSelection()
+
+			offspring := algorithm.createOffspring(parents)
+
+			algorithm.population = append(algorithm.population, offspring...)
+
+			algorithm.selectSurvivors()
+
+			algorithm.generations++
+
+			for _, solution := range algorithm.population {
+				solution.Generation = algorithm.generations
+			}
+
+			sort.Sort(algorithm.population)
+			log.Printf("Generation: %d", algorithm.generations)
+			log.Printf("Current best: %f", algorithm.population[0].Fitness)
+
+			//time.Sleep(10 * time.Millisecond)
+
+
 		}
 	}()
 }
 
 func (algorithm *Algorithm) createOffspring(parents CandidateSolutions) CandidateSolutions {
 	offspring := make(CandidateSolutions, len(parents))
+	offSpringIndex := 0
 	for i := 0; i < len(parents); i += 2 {
 		parent1 := parents[i]
 		parent2 := parents[i + 1]
@@ -56,7 +87,8 @@ func (algorithm *Algorithm) createOffspring(parents CandidateSolutions) Candidat
 			if (algorithm.shouldBeMutated()) {
 				child.mutate()
 			}
-			offspring = append(offspring, child)
+			offspring[offSpringIndex] = child
+			offSpringIndex++
 		}
 	}
 	return offspring
@@ -77,7 +109,7 @@ func (algorithm *Algorithm) selectSurvivors() {
 	sort.Sort(algorithm.population)
 
 	// Cut down the population
-	algorithm.population = append(algorithm.population, algorithm.population[0:algorithm.populationSize]...)
+	algorithm.population = algorithm.population[0:algorithm.populationSize]
 }
 
 /**
@@ -95,7 +127,7 @@ func (algorithm *Algorithm) parentSelection() CandidateSolutions {
 		randomCandidateSolution := tempPopulation[randomIndex]
 
 		// Add candidate to the random candidates
-		randomCandidates = append(randomCandidates, randomCandidateSolution)
+		randomCandidates[i] = randomCandidateSolution
 
 		// TODO verify
 		/*
@@ -112,7 +144,9 @@ func (algorithm *Algorithm) parentSelection() CandidateSolutions {
 	* return a list with size parentSelectionSize with the best
 	* CandidateSolutions
 	*/
-	return append(randomCandidates, randomCandidates[0:algorithm.parentSelectionSize]...)
+	result := randomCandidates[0:algorithm.parentSelectionSize]
+
+	return result
 }
 
 func (algorithm *Algorithm) initialisation() CandidateSolutions {

@@ -36,7 +36,11 @@ func main() {
 
 	router.PathPrefix("/").Handler(http.FileServer(http.Dir("../frontend/app")))
 
+
 	log.Fatal(http.ListenAndServe("localhost:8080", router))
+
+
+
 }
 
 func ListCities(response http.ResponseWriter, request *http.Request) {
