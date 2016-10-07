@@ -92,8 +92,7 @@ func (algorithm *Algorithm) shouldBeMutated() bool {
 */
 // Magic Marker: shown in presentation
 func (algorithm *Algorithm) selectSurvivors() {
-	//defer timeTrack(time.Now(), "selectSurvivors")
-	algorithm.population = algorithm.population[0:algorithm.populationSize]
+	algorithm.population = algorithm.population[:algorithm.populationSize]
 }
 
 /**
@@ -102,8 +101,6 @@ func (algorithm *Algorithm) selectSurvivors() {
 */
 // Magic Marker: shown in presentation
 func (algorithm *Algorithm) parentSelection() CandidateSolutions {
-	//defer timeTrack(time.Now(), "parentSelection")
-
 	tempPopulation := make(CandidateSolutions, algorithm.populationSize)
 	copy(tempPopulation, algorithm.population)
 
@@ -116,40 +113,29 @@ func (algorithm *Algorithm) parentSelection() CandidateSolutions {
 		// Add candidate to the random candidates
 		randomCandidates[i] = randomCandidateSolution
 
-		/*
-	   	* delete the candidate from the temp population, so we can't pick
-	   	* it again
-	   	*/
-
-		tempPopulation[randomIndex] = tempPopulation[len(tempPopulation)-1] // Replace it with the last one.
-		tempPopulation = tempPopulation[:len(tempPopulation)-1]
+		// delete the candidate from the temp population, so we can't pick it again
+		tempPopulation[randomIndex] = tempPopulation[len(tempPopulation) - 1]
+		tempPopulation = tempPopulation[:len(tempPopulation) - 1]
 	}
-
 
 	/* Sort the population so that the best candidates are up front */
 	sort.Sort(randomCandidates)
 
-	/*
-	* return a list with size parentSelectionSize with the best
-	* CandidateSolutions
-	*/
-	result := randomCandidates[0:algorithm.parentSelectionSize]
-
-	return result
+	/* return a list with size parentSelectionSize with the best CandidateSolutions */
+	return randomCandidates[:algorithm.parentSelectionSize]
 }
 
 func (algorithm *Algorithm) initialisation() {
 	algorithm.population = make(CandidateSolutions, algorithm.populationSize)
 	for i := 0; i < algorithm.populationSize; i++ {
-		candidateSolution := NewCandidateSolution(getBaseCity(), getRandomizedCities())
-		algorithm.population[i] = candidateSolution
+		algorithm.population[i] = NewCandidateSolution(getBaseCity(), getRandomizedCities())
 	}
 	algorithm.determineCurrentBest()
 }
 
 func (algorithm *Algorithm) determineCurrentBest() {
 	//defer timeTrack(time.Now(), "determineCurrentBest")
-	if (len(algorithm.population)> 0) {
+	if (len(algorithm.population) > 0) {
 		sort.Sort(algorithm.population)
 		algorithm.currentBest = algorithm.population[0]
 	}

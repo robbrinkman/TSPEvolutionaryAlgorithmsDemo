@@ -9,8 +9,8 @@ import (
 type CandidateSolution struct {
 	BaseCity       City
 	VisitingCities []City
-	Route          []City  	`json:"route"`
-	Fitness        float64	`json:"fitness"`
+	Route          []City        `json:"route"`
+	Fitness        float64        `json:"fitness"`
 	Generation     int      `json:"generation"`
 }
 
@@ -32,7 +32,7 @@ func (candidateSolution *CandidateSolution) recombine(otherParent CandidateSolut
 	parentRoute1 := candidateSolution.VisitingCities
 	parentRoute2 := otherParent.VisitingCities
 
-	/* randomize cutIndex for "cross-and-fill point" */
+	/* determine a random cutIndex for "cross-and-fill point" */
 	cutIndex := int32(rand.Intn(len(parentRoute1)))
 
 	/* initialize the routes for the children */
@@ -40,8 +40,8 @@ func (candidateSolution *CandidateSolution) recombine(otherParent CandidateSolut
 	childRoute2 := make(Cities, len(parentRoute1))
 
 	/* get the first part of both parent routes using the cut index */
-	partRoute1 := parentRoute1[0:cutIndex]
-	partRoute2 := parentRoute2[0:cutIndex]
+	partRoute1 := parentRoute1[:cutIndex]
+	partRoute2 := parentRoute2[:cutIndex]
 
 	/* copy the first part of the parents cut into the children */
 	copy(childRoute1, partRoute1)
@@ -134,7 +134,7 @@ func (candidateSolution *CandidateSolution) GetFitness() float64 {
 
 // Magic Marker: shown in presentation
 func (candidateSolution *CandidateSolution) calculateFitness() {
-	totalDistance := float64(0)
+	var totalDistance float64
 	for i := 0; i < (len(candidateSolution.Route) - 1); i++ {
 		city := candidateSolution.Route[i]
 		nextCity := candidateSolution.Route[i + 1]
