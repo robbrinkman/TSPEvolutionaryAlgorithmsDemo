@@ -17,6 +17,16 @@ import (
 
 var algorithmRunner *AlgorithmRunner
 
+type AlgorithmOptions struct {
+	MutationProbability int
+	PopulationSize int
+	NrOfGenerations int
+	FitnessThreshold float64
+	ParentSelectionSize int
+	ParentPoolSize int
+	AlgorithmStyle string
+}
+
 func main() {
 	router := mux.NewRouter()
 	router.HandleFunc("/api/cities", ListCities)
@@ -48,7 +58,7 @@ func ListCities(response http.ResponseWriter, request *http.Request) {
 }
 
 func CurrentBest(response http.ResponseWriter, request *http.Request) {
-	if(algorithmRunner.Running) {
+	if(algorithmRunner.running()) {
 	    json.NewEncoder(response).Encode(algorithmRunner.getCurrentBest())
 	} else {
 	    http.Error(response, "No Algorithm running at this point in time. Please start one.", http.StatusInternalServerError)
@@ -59,19 +69,22 @@ func LatestBest(response http.ResponseWriter, request *http.Request) {
 	json.NewEncoder(response).Encode(algorithmRunner.getCurrentBest())
 }
 func StillRunning(response http.ResponseWriter, request *http.Request) {
-	json.NewEncoder(response).Encode(algorithmRunner != nil && algorithmRunner.Running)
+	json.NewEncoder(response).Encode(algorithmRunner != nil && algorithmRunner.running())
 }
 
 func StartAlgorithm(response http.ResponseWriter, request *http.Request) {
-	if (algorithmRunner != nil && algorithmRunner.Running) {
+	decoder := json.NewDecoder(request.Body)
+	var algorithmOptions AlgorithmOptions
+	decoder.Decode(&algorithmOptions)
+	if (algorithmRunner != nil && algorithmRunner.running()) {
 		log.Println("Trying to start an running Traveler, skipping")
 	} else {
-		algorithmRunner = startAlgorithmRunner()
+		algorithmRunner = startAlgorithmRunner(algorithmOptions)
 	}
 }
 
 func StopAlgorithm(response http.ResponseWriter, request *http.Request) {
-	if (algorithmRunner == nil || !algorithmRunner.Running) {
+	if (algorithmRunner == nil || !algorithmRunner.running()) {
 		log.Println("Trying to stop an non-running Traveler, skipping")
 	} else {
 		algorithmRunner.stop()

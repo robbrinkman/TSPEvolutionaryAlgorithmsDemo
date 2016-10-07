@@ -5,21 +5,20 @@ import (
 )
 
 type AlgorithmRunner struct {
-	Running bool
 	Algorithm Algorithm
 }
 
 // TODO implement multi threading here
 
 // Start using a pointer so we can run a go routine on the actual travelr
-func startAlgorithmRunner() *AlgorithmRunner {
+func startAlgorithmRunner(algorithmOptions AlgorithmOptions) *AlgorithmRunner {
 
 	// Create new traveller and set to running
 	// TODO Should accept the config from the client side
 	// TODO Refactor
 	fmt.Println("Starting Algorithm")
-  algorithm := NewAlgorithm()
-	traveler := AlgorithmRunner{Running: true}
+  	algorithm := NewAlgorithm(algorithmOptions)
+	traveler := AlgorithmRunner{}
 	fmt.Println("start")
 	traveler.Algorithm = algorithm
 	traveler.Algorithm.start()
@@ -28,8 +27,11 @@ func startAlgorithmRunner() *AlgorithmRunner {
 }
 
 func (traveler *AlgorithmRunner) stop() {
-	traveler.Running = false
 	traveler.Algorithm.stop()
+}
+
+func (traveler *AlgorithmRunner) running() bool {
+	return traveler.Algorithm.running
 }
 
 func (traveler *AlgorithmRunner) getCurrentBest() CandidateSolution {

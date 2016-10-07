@@ -5,6 +5,7 @@ import (
 	"sort"
 	"log"
 	"time"
+	"fmt"
 )
 
 type Algorithm struct {
@@ -20,15 +21,16 @@ type Algorithm struct {
 	running             bool
 }
 
-func NewAlgorithm() Algorithm {
+func NewAlgorithm(algorithmOptions AlgorithmOptions) Algorithm {
 	algorithm := Algorithm{}
-	algorithm.mutationProbability = 25
-	algorithm.populationSize = 50000
-	algorithm.nrOfGenerations = 5000
-	algorithm.fitnessThreshold = 6000
-	algorithm.parentSelectionSize = 6000
-	algorithm.parentPoolSize = 10000
+	algorithm.mutationProbability = algorithmOptions.MutationProbability
+	algorithm.populationSize = algorithmOptions.PopulationSize
+	algorithm.nrOfGenerations = algorithmOptions.NrOfGenerations
+	algorithm.fitnessThreshold = algorithmOptions.FitnessThreshold
+	algorithm.parentSelectionSize = algorithmOptions.ParentSelectionSize
+	algorithm.parentPoolSize = algorithmOptions.ParentPoolSize
 	algorithm.running = false
+	fmt.Println(algorithm)
 	return algorithm
 }
 
@@ -44,7 +46,7 @@ func (algorithm *Algorithm) start() {
 
 	go func() {
 
-		for algorithm.generations = 0; algorithm.generations != algorithm.nrOfGenerations  && algorithm.population[0].GetFitness() > algorithm.fitnessThreshold && algorithm.running;
+		for algorithm.generations = 0; algorithm.running;
 		{
 			parents := algorithm.parentSelection()
 
@@ -56,6 +58,10 @@ func (algorithm *Algorithm) start() {
 			algorithm.selectSurvivors()
 
 			algorithm.generations++
+
+			if(algorithm.generations == algorithm.nrOfGenerations  || algorithm.population[0].GetFitness() <= algorithm.fitnessThreshold) {
+				algorithm.running = false;
+			}
 
 			log.Printf("Generation: %d", algorithm.generations)
 			log.Printf("Current best: %f", algorithm.population[0].GetFitness())
