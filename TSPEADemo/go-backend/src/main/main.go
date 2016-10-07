@@ -48,12 +48,15 @@ func ListCities(response http.ResponseWriter, request *http.Request) {
 }
 
 func CurrentBest(response http.ResponseWriter, request *http.Request) {
-	json.NewEncoder(response).Encode(algorithmRunner.getCurrentBest())
+	if(algorithmRunner.Running) {
+	    json.NewEncoder(response).Encode(algorithmRunner.getCurrentBest())
+	} else {
+	    http.Error(response, "No Algorithm running at this point in time. Please start one.", http.StatusInternalServerError)
+	}
 }
 
 func LatestBest(response http.ResponseWriter, request *http.Request) {
-	// TODO: This is just testing REST and FE
-	CurrentBest(response, request)
+	json.NewEncoder(response).Encode(algorithmRunner.getCurrentBest())
 }
 func StillRunning(response http.ResponseWriter, request *http.Request) {
 	json.NewEncoder(response).Encode(algorithmRunner != nil && algorithmRunner.Running)
