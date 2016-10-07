@@ -207,7 +207,7 @@ angular.module('myApp').directive('demo', ['$routeParams', function ($routeParam
                 }
 
                 $scope.areas = response.data.route;
-                $scope.run.bestFitness = response.data.fitness;
+                $scope.run.bestFitness = parseInt(response.data.fitness);
                 $scope.run.generation = response.data.generation;
 
                 $scope.fitnessPlot.ys = $scope.fitnessPlot.ys.slice(1);

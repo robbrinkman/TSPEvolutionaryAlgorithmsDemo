@@ -4,6 +4,7 @@ import (
 	"math/rand"
 	"sort"
 	"log"
+	"time"
 )
 
 type Algorithm struct {
@@ -63,6 +64,7 @@ func (algorithm *Algorithm) start() {
 }
 
 func (algorithm *Algorithm) createOffspring(parents CandidateSolutions) CandidateSolutions {
+	//defer timeTrack(time.Now(), "createOffspring")
 	offspring := make(CandidateSolutions, len(parents))
 	offSpringIndex := 0
 	for i := 0; i < len(parents); i += 2 {
@@ -89,6 +91,7 @@ func (algorithm *Algorithm) shouldBeMutated() bool {
 * list, so we have the original population size again
 */
 func (algorithm *Algorithm) selectSurvivors() {
+	//defer timeTrack(time.Now(), "selectSurvivors")
 	algorithm.population = algorithm.population[0:algorithm.populationSize]
 }
 
@@ -97,10 +100,13 @@ func (algorithm *Algorithm) selectSurvivors() {
 * the population
 */
 func (algorithm *Algorithm) parentSelection() CandidateSolutions {
+	//defer timeTrack(time.Now(), "parentSelection")
+
 	tempPopulation := make(CandidateSolutions, algorithm.populationSize)
 	copy(tempPopulation, algorithm.population)
 
 	randomCandidates := make(CandidateSolutions, algorithm.parentPoolSize)
+
 	for i := 0; i < algorithm.parentPoolSize; i++ {
 		randomIndex := rand.Intn(len(tempPopulation))
 		randomCandidateSolution := tempPopulation[randomIndex]
@@ -112,8 +118,11 @@ func (algorithm *Algorithm) parentSelection() CandidateSolutions {
 	   	* delete the candidate from the temp population, so we can't pick
 	   	* it again
 	   	*/
-		tempPopulation = append(tempPopulation[:randomIndex], tempPopulation[randomIndex + 1:]...)
+
+		tempPopulation[randomIndex] = tempPopulation[len(tempPopulation)-1] // Replace it with the last one.
+		tempPopulation = tempPopulation[:len(tempPopulation)-1]
 	}
+
 
 	/* Sort the population so that the best candidates are up front */
 	sort.Sort(randomCandidates)
@@ -137,6 +146,7 @@ func (algorithm *Algorithm) initialisation() {
 }
 
 func (algorithm *Algorithm) determineCurrentBest() {
+	//defer timeTrack(time.Now(), "determineCurrentBest")
 	if (len(algorithm.population)> 0) {
 		sort.Sort(algorithm.population)
 		algorithm.currentBest = algorithm.population[0]
@@ -152,4 +162,9 @@ func (algorithm *Algorithm) getCurrentBest() CandidateSolution {
 		// TODO find nice solution to return something if no population or throw exception
 		return CandidateSolution{}
 	}
+}
+
+func timeTrack(start time.Time, name string) {
+	elapsed := time.Since(start)
+	log.Printf("%s took %s", name, elapsed)
 }
