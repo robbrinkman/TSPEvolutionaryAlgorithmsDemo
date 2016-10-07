@@ -90,6 +90,7 @@ func (algorithm *Algorithm) shouldBeMutated() bool {
 * Selects the survivors by removing the worst candidate solutions from the
 * list, so we have the original population size again
 */
+// Magic Marker: shown in presentation
 func (algorithm *Algorithm) selectSurvivors() {
 	//defer timeTrack(time.Now(), "selectSurvivors")
 	algorithm.population = algorithm.population[0:algorithm.populationSize]
@@ -99,6 +100,7 @@ func (algorithm *Algorithm) selectSurvivors() {
 * Select the x best candidate solutions from a randomly selected pool from
 * the population
 */
+// Magic Marker: shown in presentation
 func (algorithm *Algorithm) parentSelection() CandidateSolutions {
 	//defer timeTrack(time.Now(), "parentSelection")
 

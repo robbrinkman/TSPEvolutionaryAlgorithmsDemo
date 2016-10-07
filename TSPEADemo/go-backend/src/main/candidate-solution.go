@@ -25,7 +25,7 @@ func NewCandidateSolution(baseCity City, visitingCities []City) CandidateSolutio
 	return candidateSolution
 }
 
-
+// Magic Marker: shown in presentation
 func (candidateSolution *CandidateSolution) recombine(otherParent CandidateSolution) CandidateSolutions {
 
 	/* get routes of both parents */
@@ -76,7 +76,7 @@ func (candidateSolution CandidateSolution) printRoute() {
 * that are not yet in the child (in the order of the route of the crossing
 * parent)
 */
-
+// Magic Marker: shown in presentation
 func (candidateSolution *CandidateSolution) crossFill(childRoute Cities, parentRoute []City, cutIndex int32) {
 	/*
 	 * traverse the parent route from the cut index on and add every city
@@ -106,6 +106,7 @@ func (candidateSolution *CandidateSolution) crossFill(childRoute Cities, parentR
 	}
 }
 
+// Magic Marker: shown in presentation
 func (candidateSolution *CandidateSolution) mutate() {
 
 	/* randomly select two indices in the route */
@@ -131,6 +132,7 @@ func (candidateSolution *CandidateSolution) GetFitness() float64 {
 	return candidateSolution.Fitness
 }
 
+// Magic Marker: shown in presentation
 func (candidateSolution *CandidateSolution) calculateFitness() {
 	totalDistance := float64(0)
 	for i := 0; i < (len(candidateSolution.Route) - 1); i++ {
