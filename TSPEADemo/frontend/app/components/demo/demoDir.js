@@ -240,7 +240,7 @@ angular.module('myApp').directive('demo', ['$routeParams', function ($routeParam
                             if(algorithmResult.algorithmStyle) {
                                 algorithmResult.algorithmStyle = $scope.settings.selectedAlgorithmStyle;
                             }
-
+                            algorithmResult.fitness = parseInt(algorithmResult.fitness);
                             firebaseRef.push({algorithmResult: algorithmResult});
                             $scope.updateHistory();
                         }
